@@ -3,6 +3,106 @@
 #include <string>
 using namespace std;
 
+class Tabela
+{
+
+private:
+	char* nume_tabela;
+	//char** nume_coloane;
+	int nr_coloane;
+	Coloane* c;
+public:
+	
+	//aici vom pune constructori
+	
+	//Supraincarcare operatori
+
+	bool operator!()
+	{
+		return nume_tabela != 0;
+	}
+
+	Tabela operator++()
+	{
+		nr_coloane++;
+		return *this;
+	}
+
+	Tabela operator++(int i)
+	{
+		Tabela copie = *this;
+		nr_coloane++;
+		return copie;
+	}
+
+	Tabela operator--()
+	{
+		nr_coloane--;
+		return *this;
+	}
+
+	Tabela operator--(int i)
+	{
+		Tabela copie = *this;
+		nr_coloane--;
+		return copie;
+	}
+
+	Tabela operator+(Tabela t)
+	{
+		Tabela copie = *this;
+		copie.nr_coloane = nr_coloane + t.nr_coloane;
+		return copie;
+	}
+
+	Tabela operator-(Tabela t)
+	{
+		Tabela copie = *this;
+		if (nr_coloane >= t.nr_coloane)
+		{
+			copie.nr_coloane = nr_coloane - t.nr_coloane;
+			return copie;
+		}
+		else
+		{
+			cout << "Numarul de coloane va fi negativ"<<endl;
+		}
+	}
+
+	int operator[](int index)
+	{
+		if (index >= 0 && index < strlen(nume_tabela))
+		{
+			return nume_tabela[index];
+		}
+		else
+		{
+			return -1;
+		}
+	}
+
+	explicit operator int()
+	{
+		return nr_coloane;
+	}
+
+	operator int()
+	{
+		return nr_coloane;
+	}
+
+	bool operator >(Tabela t)
+	{
+		return this->nr_coloane < t.nr_coloane;
+	}
+
+	bool operator==(Tabela& t)
+	{
+		return  this->nr_coloane=t.nr_coloane ;
+	}
+};
+
+
 class Coloana
 {
 private:
