@@ -607,6 +607,36 @@ ostream& operator<<(ostream& out, Tabela d)
 	return out;
 }
 
+istream& operator>>(istream& in, Tabela& t)
+{
+	cout << "Nume tabela: ";
+	//in >> ws;
+	char buffer[100];
+	in.getline(buffer, 99);
+	int l = strlen(buffer);
+	if (t.nume_tabela != nullptr)
+	{
+		delete[] t.nume_tabela;
+	}
+	if (l > 0)
+	{
+		t.nume_tabela = new char[l + 1];
+		strcpy_s(t.nume_tabela, l + 1, buffer);
+		//in >> ws;
+	}
+	else
+	{
+		t.nume_tabela = nullptr;
+	}
+	cout << "Numar coloane: ";
+	in >> t.nr_coloane;
+	for (int i = 0; i < t.nr_coloane; i++)
+	{
+		in >> t.col[i];
+	}
+	
+	return in;
+}
 //////////////////////operator>> Tabela
 //////////{
 ///////
