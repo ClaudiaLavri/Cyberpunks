@@ -279,11 +279,6 @@ public:
 		}
 	}
 
-	explicit operator int()
-	{
-		return dimensiune;
-	}
-
 	operator int()
 	{
 		return dimensiune;
@@ -582,11 +577,6 @@ public:
 		{
 			return -1;
 		}
-	}
-
-	explicit operator int()
-	{
-		return nr_coloane;
 	}
 
 	operator int()
