@@ -782,3 +782,85 @@ public:
 		}
 	}
 };
+
+class Database
+{
+private:
+	Tabela* tabela;
+	int nr_tabele = 0;
+public:
+	Database()
+	{
+		this->tabela = nullptr;
+	}
+
+	Database(Tabela* tabela)
+	{
+		if (tabela != nullptr)
+		{
+			this->tabela = tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	Database(const Database& database)
+	{
+		if (database.tabela != nullptr)
+		{
+			this->tabela = database.tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	Database& operator=(Database& database)
+	{
+		if (this->tabela != nullptr)
+		{
+			delete[] tabela;
+		}
+		if (database.tabela != nullptr)
+		{
+			this->tabela = database.tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	~Database()
+	{
+		if (this->tabela != nullptr)
+		{
+			delete[] this->tabela;
+		}
+	}
+
+	friend ostream& operator<<(ostream& out, Database);
+	friend istream& operator>>(istream& in, Database&);
+};
+
+ostream& operator<<(ostream& out, Database d)
+{
+	for (int i = 0; i < d.nr_tabele; i++)
+	{
+		out << d.tabela[i] << endl;
+	}
+}
+
+istream& operator>>(istream& in, Database& d)
+{
+	for (int i = 0; i < d.nr_tabele; i++)
+	{
+		in >> d.tabela[i];
+	}
+}
