@@ -10,7 +10,7 @@ private:
 	char* nume_tabela;
 	//char** nume_coloane;
 	int nr_coloane;
-	Coloane* c;
+	Coloana* col;
 public:
 	Tabela()											//constructor implicit
 	{
