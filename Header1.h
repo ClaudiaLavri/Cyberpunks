@@ -475,6 +475,94 @@ public:
 	{
 		return this->val_implicita;
 	}
+	
+	//Supraincarcare operatori Coloane
+
+	bool operator!()
+	{
+		return val_implicita != nullptr;
+	}
+
+	Coloane operator++()
+	{
+		dimensiune++;
+		return *this;
+	}
+
+	Coloane operator++(int i)
+	{
+		Coloane copie = *this;
+		dimensiune++;
+		return copie;
+	}
+
+	Coloane operator--()
+	{
+		dimensiune--;
+		return *this;
+	}
+
+	Coloane operator--(int i)
+	{
+		Coloane copie = *this;
+		dimensiune--;
+		return copie;
+	}
+
+	Coloane operator+(Coloane t)
+	{
+		Coloane copie = *this;
+		copie.dimensiune = dimensiune + t.dimensiune;
+		return copie;
+	}
+
+	Coloane operator-(Coloane t)
+	{
+		Coloane copie = *this;
+		if (dimensiune >= t.dimensiune)
+		{
+			copie.dimensiune = dimensiune - t.dimensiune;
+			return copie;
+		}
+		else
+		{
+			cout << "Dimensiunea va fi negativa"<<endl;
+		}
+	}
+
+	int operator[](int index)
+	{
+		if (index >= 0 && index < strlen(tip))
+		{
+			return tip[index];
+		}
+		else
+		{
+			return -1;
+		}
+	}
+
+	explicit operator int()
+	{
+		return dimensiune;
+	}
+
+	operator int()
+	{
+		return dimensiune;
+	}
+
+	bool operator >(Coloane t)
+	{
+		return this->dimensiune < t.dimensiune;
+	}
+
+	bool operator==(Coloane& t)
+	{
+		return  this->tip=t.tip ;
+	}
+
+};
 
 	friend class Tabele;
 	friend ostream& operator<<(ostream& out, Coloana);
