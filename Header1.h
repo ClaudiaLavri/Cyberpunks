@@ -220,42 +220,42 @@ public:
 		return val_implicita != nullptr;
 	}
 
-	Coloane operator++()
+	Coloana operator++()
 	{
 		dimensiune++;
 		return *this;
 	}
 
-	Coloane operator++(int i)
+	Coloana operator++(int i)
 	{
-		Coloane copie = *this;
+		Coloana copie = *this;
 		dimensiune++;
 		return copie;
 	}
 
-	Coloane operator--()
+	Coloana operator--()
 	{
 		dimensiune--;
 		return *this;
 	}
 
-	Coloane operator--(int i)
+	Coloana operator--(int i)
 	{
 		Coloane copie = *this;
 		dimensiune--;
 		return copie;
 	}
 
-	Coloane operator+(Coloane t)
+	Coloana operator+(Coloane t)
 	{
 		Coloane copie = *this;
 		copie.dimensiune = dimensiune + t.dimensiune;
 		return copie;
 	}
 
-	Coloane operator-(Coloane t)
+	Coloana operator-(Coloane t)
 	{
-		Coloane copie = *this;
+		Coloana copie = *this;
 		if (dimensiune >= t.dimensiune)
 		{
 			copie.dimensiune = dimensiune - t.dimensiune;
@@ -269,9 +269,9 @@ public:
 
 	int operator[](int index)
 	{
-		if (index >= 0 && index < strlen(tip))
+		if (index >= 0 && index < strlen(tip_coloana))
 		{
-			return tip[index];
+			return tip_coloana[index];
 		}
 		else
 		{
@@ -284,19 +284,17 @@ public:
 		return dimensiune;
 	}
 
-	bool operator >(Coloane t)
+	bool operator >(Coloana t)
 	{
 		return this->dimensiune < t.dimensiune;
 	}
 
-	bool operator==(Coloane& t)
+	bool operator==(Coloana& t)
 	{
 		return  this->tip=t.tip ;
 	}
 
-};
-
-	friend class Tabele;
+	friend class Tabela;
 	friend ostream& operator<<(ostream& out, Coloana);
 	friend istream& operator>>(istream& in, Coloana&);
 };
@@ -593,10 +591,26 @@ public:
 	{
 		return  this->nr_coloane=t.nr_coloane ;
 	}
+	friend class Coloana;
+	friend ostream& operator<<(ostream& out, Tabela);
+	friend istream& operator>>(istream& in, Tabela&);
 };
 
+ostream& operator<<(ostream& out, Tabela d)
+{
+	out << d.nume_tabela << endl;
+	for (int i = 0; i < d.nr_coloane; i++)
+	{
+		out << d.col[i].getNumeColoana()<< "\t";
+	}
+	
+	return out;
+}
 
-
+//////////////////////operator>> Tabela
+//////////{
+///////
+///////}
 
 class Inregistrare
 {
@@ -625,6 +639,63 @@ private:
 	Tabela* tabela;
 	int nr_tabele;
 public:
+	
+	Database()
+	{
+		this->tabela = nullptr;
+	}
+
+	Database(Tabela* tabela)
+	{
+		if (tabela != nullptr)
+		{
+			this->tabela = tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	Database(const Database& database)
+	{
+		if (database.tabela != nullptr)
+		{
+			this->tabela = database.tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	Database& operator=(Database& database)
+	{
+		if (this->tabela != nullptr)
+		{
+			delete[] tabela;
+		}
+		if (database.tabela != nullptr)
+		{
+			this->tabela = database.tabela;
+			this->nr_tabele++;
+		}
+		else
+		{
+			this->tabela = nullptr;
+		}
+	}
+
+	~Database()
+	{
+		if (this->tabela != nullptr)
+		{
+			delete[] this->tabela;
+		}
+	}
+	
 	void New_table(string x)									//creeaza o noua tabela
 	{
 		if (nr_tabele == 0)
@@ -698,8 +769,29 @@ public:
 	{
 		//de facut
 	}
+	
 
+	friend ostream& operator<<(ostream& out, Database);
+	friend istream& operator>>(istream& in, Database&);
 };
+
+ostream& operator<<(ostream& out, Database d)
+{
+	for (int i = 0; i < d.nr_tabele; i++)
+	{
+		out << d.tabela[i] << endl;
+	}
+	return out;
+}
+
+istream& operator>>(istream& in, Database& d)
+{
+	for (int i = 0; i < d.nr_tabele; i++)
+	{
+		in >> d.tabela[i];
+	}
+	return in;
+}
 
 class RecunoastereText
 {
@@ -783,84 +875,3 @@ public:
 	}
 };
 
-class Database
-{
-private:
-	Tabela* tabela;
-	int nr_tabele = 0;
-public:
-	Database()
-	{
-		this->tabela = nullptr;
-	}
-
-	Database(Tabela* tabela)
-	{
-		if (tabela != nullptr)
-		{
-			this->tabela = tabela;
-			this->nr_tabele++;
-		}
-		else
-		{
-			this->tabela = nullptr;
-		}
-	}
-
-	Database(const Database& database)
-	{
-		if (database.tabela != nullptr)
-		{
-			this->tabela = database.tabela;
-			this->nr_tabele++;
-		}
-		else
-		{
-			this->tabela = nullptr;
-		}
-	}
-
-	Database& operator=(Database& database)
-	{
-		if (this->tabela != nullptr)
-		{
-			delete[] tabela;
-		}
-		if (database.tabela != nullptr)
-		{
-			this->tabela = database.tabela;
-			this->nr_tabele++;
-		}
-		else
-		{
-			this->tabela = nullptr;
-		}
-	}
-
-	~Database()
-	{
-		if (this->tabela != nullptr)
-		{
-			delete[] this->tabela;
-		}
-	}
-
-	friend ostream& operator<<(ostream& out, Database);
-	friend istream& operator>>(istream& in, Database&);
-};
-
-ostream& operator<<(ostream& out, Database d)
-{
-	for (int i = 0; i < d.nr_tabele; i++)
-	{
-		out << d.tabela[i] << endl;
-	}
-}
-
-istream& operator>>(istream& in, Database& d)
-{
-	for (int i = 0; i < d.nr_tabele; i++)
-	{
-		in >> d.tabela[i];
-	}
-}
