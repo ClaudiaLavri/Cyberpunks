@@ -3,269 +3,6 @@
 #include <string>
 using namespace std;
 
-class Tabela
-{
-
-private:
-	char* nume_tabela;
-	//char** nume_coloane;
-	int nr_coloane;
-	Coloana* col;
-public:
-	Tabela()											//constructor implicit
-	{
-		nume_tabela = new char[strlen("Tabel") + 1];
-		strcpy_s(nume_tabela, strlen("Tabel") + 1, "Tabel");
-		nr_coloane = 0;
-		col = nullptr;
-	}
-
-	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana)					//consrtuctor cu parametrii
-	{
-		if (nume_tabela != nullptr)
-		{
-			this->nume_tabela = new char[strlen(nume_tabela)];
-			strcpy_s(this->nume_tabela, strlen(nume_tabela) + 1, nume_tabela);
-		}
-		this->nr_coloane = nr_coloane;
-		if (nr_coloane > 0)
-		{
-			this->col = new Coloana[nr_coloane];
-			for (int i = 0; i < nr_coloane; i++)
-			{
-				this->col[i] = coloana[i];
-			}
-		}
-	}
-
-	~Tabela()					 						//destructor
-	{
-		if (nume_tabela != nullptr)
-		{
-			delete[] nume_tabela;
-		}
-
-		if (col != nullptr)
-		{
-			delete[] col;
-		}
-	}
-
-	Tabela(const Tabela& t)										//constructor de copiere
-	{
-		if (nume_tabela != nullptr)
-		{
-			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
-			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
-		}
-		else
-		{
-			this->nume_tabela = nullptr;
-		}
-
-		if (nr_coloane > 0)
-		{
-			this->nr_coloane = t.nr_coloane;
-			this->col = new Coloana[nr_coloane];
-			for (int i = 0; i < t.nr_coloane; i++)
-			{
-				this->col[i] = t.col[i];
-			}
-		}
-	}
-
-	Tabela& operator=(const Tabela& t)				  				//supraincarcare operator =
-	{
-		if (nume_tabela != nullptr)
-		{
-			delete[] nume_tabela;
-		}
-
-		if (col != nullptr)
-		{
-			delete[] col;
-		}
-		if (nume_tabela != nullptr)
-		{
-			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
-			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
-		}
-		else
-		{
-			this->nume_tabela = nullptr;
-		}
-
-		if (nr_coloane > 0)
-		{
-			this->nr_coloane = t.nr_coloane;
-			this->col = new Coloana[nr_coloane];
-			for (int i = 0; i < t.nr_coloane; i++)
-			{
-				this->col[i] = t.col[i];
-			}
-		}
-	}
-
-	void SetNume_tabela(char* nume_tabela)									//setter nume tabela
-	{
-		if (nume_tabela != nullptr)
-		{
-			this->nume_tabela = new char[strlen(nume_tabela) + 1];
-			strcpy_s(this->nume_tabela, strlen(nume_tabela) + 1, nume_tabela);
-		}
-		else
-		{
-			this->nume_tabela = nullptr;
-		}
-	}
-
-	char* GetNume_tabela()						 					//getter nume tabela
-	{
-		if (nume_tabela != nullptr)
-		{
-			return nume_tabela;
-		}
-		else
-		{
-			return nullptr;
-		}
-	}
-
-	void SetNr_coloane(int nr_coloane)					 				//setter numar coloane
-	{
-		if (nr_coloane > 0)
-		{
-			this->nr_coloane = nr_coloane;
-		}
-	}
-
-	int GetNr_coloane()							  				//getter numar coloane
-	{
-		if (this->nr_coloane > 0)
-		{
-			return this->nr_coloane;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	void SetColoana(Coloana* col, int nr_coloane)								//setter coloane
-	{
-		if (nr_coloane > 0 && col != nullptr)
-		{
-			this->col = new Coloana[nr_coloane];
-			for (int i = 0; i < nr_coloane; i++)
-			{
-				this->col[i] = col[i];
-			}
-		}
-		else
-		{
-			col = nullptr;
-		}
-	}
-
-	Coloana* GetColoana()											//getter coloane
-	{
-		if (this->col != nullptr)
-		{
-			return col;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	
-	//Supraincarcare operatori
-
-	bool operator!()
-	{
-		return nume_tabela != 0;
-	}
-
-	Tabela operator++()
-	{
-		nr_coloane++;
-		return *this;
-	}
-
-	Tabela operator++(int i)
-	{
-		Tabela copie = *this;
-		nr_coloane++;
-		return copie;
-	}
-
-	Tabela operator--()
-	{
-		nr_coloane--;
-		return *this;
-	}
-
-	Tabela operator--(int i)
-	{
-		Tabela copie = *this;
-		nr_coloane--;
-		return copie;
-	}
-
-	Tabela operator+(Tabela t)
-	{
-		Tabela copie = *this;
-		copie.nr_coloane = nr_coloane + t.nr_coloane;
-		return copie;
-	}
-
-	Tabela operator-(Tabela t)
-	{
-		Tabela copie = *this;
-		if (nr_coloane >= t.nr_coloane)
-		{
-			copie.nr_coloane = nr_coloane - t.nr_coloane;
-			return copie;
-		}
-		else
-		{
-			cout << "Numarul de coloane va fi negativ"<<endl;
-		}
-	}
-
-	int operator[](int index)
-	{
-		if (index >= 0 && index < strlen(nume_tabela))
-		{
-			return nume_tabela[index];
-		}
-		else
-		{
-			return -1;
-		}
-	}
-
-	explicit operator int()
-	{
-		return nr_coloane;
-	}
-
-	operator int()
-	{
-		return nr_coloane;
-	}
-
-	bool operator >(Tabela t)
-	{
-		return this->nr_coloane < t.nr_coloane;
-	}
-
-	bool operator==(Tabela& t)
-	{
-		return  this->nr_coloane=t.nr_coloane ;
-	}
-};
-
 
 class Coloana
 {
@@ -604,6 +341,272 @@ istream& operator>>(istream& in, Coloana& c)
 
 	return in;
 }
+
+class Tabela
+{
+
+private:
+	char* nume_tabela;
+	//char** nume_coloane;
+	int nr_coloane;
+	Coloana* col;
+public:
+	Tabela()											//constructor implicit
+	{
+		nume_tabela = new char[strlen("Tabel") + 1];
+		strcpy_s(nume_tabela, strlen("Tabel") + 1, "Tabel");
+		nr_coloane = 0;
+		col = nullptr;
+	}
+
+	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana)					//consrtuctor cu parametrii
+	{
+		if (nume_tabela != nullptr)
+		{
+			this->nume_tabela = new char[strlen(nume_tabela)];
+			strcpy_s(this->nume_tabela, strlen(nume_tabela) + 1, nume_tabela);
+		}
+		this->nr_coloane = nr_coloane;
+		if (nr_coloane > 0)
+		{
+			this->col = new Coloana[nr_coloane];
+			for (int i = 0; i < nr_coloane; i++)
+			{
+				this->col[i] = coloana[i];
+			}
+		}
+	}
+
+	~Tabela()					 						//destructor
+	{
+		if (nume_tabela != nullptr)
+		{
+			delete[] nume_tabela;
+		}
+
+		if (col != nullptr)
+		{
+			delete[] col;
+		}
+	}
+
+	Tabela(const Tabela& t)										//constructor de copiere
+	{
+		if (nume_tabela != nullptr)
+		{
+			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
+			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
+		}
+		else
+		{
+			this->nume_tabela = nullptr;
+		}
+
+		if (nr_coloane > 0)
+		{
+			this->nr_coloane = t.nr_coloane;
+			this->col = new Coloana[nr_coloane];
+			for (int i = 0; i < t.nr_coloane; i++)
+			{
+				this->col[i] = t.col[i];
+			}
+		}
+	}
+
+	Tabela& operator=(const Tabela& t)				  				//supraincarcare operator =
+	{
+		if (nume_tabela != nullptr)
+		{
+			delete[] nume_tabela;
+		}
+
+		if (col != nullptr)
+		{
+			delete[] col;
+		}
+		if (nume_tabela != nullptr)
+		{
+			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
+			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
+		}
+		else
+		{
+			this->nume_tabela = nullptr;
+		}
+
+		if (nr_coloane > 0)
+		{
+			this->nr_coloane = t.nr_coloane;
+			this->col = new Coloana[nr_coloane];
+			for (int i = 0; i < t.nr_coloane; i++)
+			{
+				this->col[i] = t.col[i];
+			}
+		}
+	}
+
+	void SetNume_tabela(char* nume_tabela)									//setter nume tabela
+	{
+		if (nume_tabela != nullptr)
+		{
+			this->nume_tabela = new char[strlen(nume_tabela) + 1];
+			strcpy_s(this->nume_tabela, strlen(nume_tabela) + 1, nume_tabela);
+		}
+		else
+		{
+			this->nume_tabela = nullptr;
+		}
+	}
+
+	char* GetNume_tabela()						 					//getter nume tabela
+	{
+		if (nume_tabela != nullptr)
+		{
+			return nume_tabela;
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	void SetNr_coloane(int nr_coloane)					 				//setter numar coloane
+	{
+		if (nr_coloane > 0)
+		{
+			this->nr_coloane = nr_coloane;
+		}
+	}
+
+	int GetNr_coloane()							  				//getter numar coloane
+	{
+		if (this->nr_coloane > 0)
+		{
+			return this->nr_coloane;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	void SetColoana(Coloana* col, int nr_coloane)								//setter coloane
+	{
+		if (nr_coloane > 0 && col != nullptr)
+		{
+			this->col = new Coloana[nr_coloane];
+			for (int i = 0; i < nr_coloane; i++)
+			{
+				this->col[i] = col[i];
+			}
+		}
+		else
+		{
+			col = nullptr;
+		}
+	}
+
+	Coloana* GetColoana()											//getter coloane
+	{
+		if (this->col != nullptr)
+		{
+			return col;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+	//Supraincarcare operatori
+
+	bool operator!()
+	{
+		return nume_tabela != 0;
+	}
+
+	Tabela operator++()
+	{
+		nr_coloane++;
+		return *this;
+	}
+
+	Tabela operator++(int i)
+	{
+		Tabela copie = *this;
+		nr_coloane++;
+		return copie;
+	}
+
+	Tabela operator--()
+	{
+		nr_coloane--;
+		return *this;
+	}
+
+	Tabela operator--(int i)
+	{
+		Tabela copie = *this;
+		nr_coloane--;
+		return copie;
+	}
+
+	Tabela operator+(Tabela t)
+	{
+		Tabela copie = *this;
+		copie.nr_coloane = nr_coloane + t.nr_coloane;
+		return copie;
+	}
+
+	Tabela operator-(Tabela t)
+	{
+		Tabela copie = *this;
+		if (nr_coloane >= t.nr_coloane)
+		{
+			copie.nr_coloane = nr_coloane - t.nr_coloane;
+			return copie;
+		}
+		else
+		{
+			cout << "Numarul de coloane va fi negativ"<<endl;
+		}
+	}
+
+	int operator[](int index)
+	{
+		if (index >= 0 && index < strlen(nume_tabela))
+		{
+			return nume_tabela[index];
+		}
+		else
+		{
+			return -1;
+		}
+	}
+
+	explicit operator int()
+	{
+		return nr_coloane;
+	}
+
+	operator int()
+	{
+		return nr_coloane;
+	}
+
+	bool operator >(Tabela t)
+	{
+		return this->nr_coloane < t.nr_coloane;
+	}
+
+	bool operator==(Tabela& t)
+	{
+		return  this->nr_coloane=t.nr_coloane ;
+	}
+};
+
+
+
 
 class Inregistrare
 {
