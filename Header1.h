@@ -626,6 +626,87 @@ public:
 	}
 };
 
+class Database
+{
+private:
+	Tabela* tabela;
+	int nr_tabele;
+public:
+	void New_table(string x)
+	{
+		if (nr_tabele == 0)
+		{
+			nr_tabele++;
+			tabela = new Tabela[nr_tabele];
+		}
+		else
+		{
+			for (int i = 0; i < nr_tabele; i++)
+			{
+				if (x == tabela[i].GetNume_tabela())
+				{
+					cout << "Tabela exista deja";
+					break;
+				}
+			}
+			Tabela* copie = new Tabela[nr_tabele + 1];
+			for (int i = 0; i < this->nr_tabele; i++)
+			{
+				copie[i] = tabela[i];
+			}
+			delete[] tabela;
+			nr_tabele++;
+			tabela = new Tabela[nr_tabele];
+			for (int i = 0; i < this->nr_tabele - 1; i++)
+			{
+				tabela[i] = copie[i];
+			}
+			delete[] copie;
+		}
+	}
+
+	void Drop_table(string x)
+	{
+		if (nr_tabele > 0)
+		{
+			Tabela auxi;
+			for (int i = 0; i < nr_tabele; i++)
+			{
+				if (x == tabela[i].GetNume_tabela())
+				{
+					auxi = tabela[i];
+				}
+			}
+			for (int i = 0; i < nr_tabele; i++)
+			{
+				Tabela* copie = new Tabela[nr_tabele];
+				if (tabela[i] == auxi)
+				{
+					copie[i] = tabela[i];
+				}
+			}
+			delete[] tabela;
+			nr_tabele--;
+			tabela = new Tabela[nr_tabele];
+			for (int i = 0; i < nr_tabele; i++)
+			{
+				tabela[i] = copie[i];
+			}
+			delete[] copie;
+		}
+		else
+		{
+			cout << "Nu exista nicio tabela";
+		}
+	}
+
+	void Display_table(string x)
+	{
+		//de facut
+	}
+
+};
+
 class RecunoastereText
 {
 private:
