@@ -632,12 +632,13 @@ private:
 	Tabela* tabela;
 	int nr_tabele;
 public:
-	void New_table(string x)
+	void New_table(string x)									//creeaza o noua tabela
 	{
 		if (nr_tabele == 0)
 		{
 			nr_tabele++;
 			tabela = new Tabela[nr_tabele];
+			tabela->SetNume_tabela(x.c_str);
 		}
 		else
 		{
@@ -665,7 +666,7 @@ public:
 		}
 	}
 
-	void Drop_table(string x)
+	void Drop_table(string x)								//sterge tabela cu numele x
 	{
 		if (nr_tabele > 0)
 		{
@@ -700,7 +701,7 @@ public:
 		}
 	}
 
-	void Display_table(string x)
+	void Display_table(string x)							//afiseaza tabela cu numele x
 	{
 		//de facut
 	}
