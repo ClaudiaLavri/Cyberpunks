@@ -127,15 +127,27 @@ public:
 		{
 			delete[] this->val_implicita;
 		}
+
 		if (c.nume_coloana != nullptr)
 		{
 			this->nume_coloana = new char[strlen(c.nume_coloana) + 1];
 			strcpy_s(this->nume_coloana, strlen(c.nume_coloana) + 1, c.nume_coloana);
 		}
+		else
+		{
+			this->nume_coloana = new char[strlen("Coloana") + 1];
+			strcpy_s(this->nume_coloana, strlen("Coloana") + 1, "Coloana");
+		}
+
 		if (c.tip_coloana != nullptr)
 		{
 			this->tip_coloana = new char[strlen(c.tip_coloana) + 1];
 			strcpy_s(this->tip_coloana, strlen(c.tip_coloana) + 1, c.tip_coloana);
+		}
+		else
+		{
+			this->tip_coloana = new char[strlen("N/A") + 1];
+			strcpy_s(this->tip_coloana, strlen("N/A") + 1, "N/A");
 		}
 		this->dimensiune = c.dimensiune;
 		if (c.val_implicita != nullptr)
@@ -143,6 +155,12 @@ public:
 			this->val_implicita = new char[strlen(c.val_implicita) + 1];
 			strcpy_s(this->val_implicita, strlen(c.val_implicita) + 1, c.val_implicita);
 		}
+		else
+		{
+			this->val_implicita = new char[strlen("N/A") + 1];
+			strcpy_s(this->val_implicita, strlen("N/A") + 1, "N/A");
+		}
+		return *this;
 	}
 	
 	~Coloana()
