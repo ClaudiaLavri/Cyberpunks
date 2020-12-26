@@ -330,6 +330,7 @@ istream& operator>>(istream& in, Coloana& c)
 {
 	//in >> ws;
 	cout << "Nume Coloana: ";
+	in>>ws;
 	string buffer1;
 	getline(in, buffer1);
 	c.nume_coloana = new char[buffer1.length() + 1];
@@ -358,7 +359,6 @@ class Tabela
 
 private:
 	char* nume_tabela;
-	//char** nume_coloane;
 	int nr_coloane;
 	Coloana* col;
 public:
@@ -385,6 +385,10 @@ public:
 			{
 				this->col[i] = coloana[i];
 			}
+		}
+		else
+		{
+			col = nullptr;
 		}
 	}
 
@@ -421,6 +425,11 @@ public:
 			{
 				this->col[i] = t.col[i];
 			}
+		}
+		else
+		{
+			col = nullptr;
+			nr_coloane = 0;
 		}
 	}
 
@@ -685,12 +694,13 @@ class Database
 {
 private:
 	Tabela* tabela;
-	int nr_tabele;
+	int nr_tabele = 0;
 public:
 	
 	Database()
 	{
 		this->tabela = nullptr;
+		this->nr_tabele = 0;
 	}
 
 	Database(Tabela* tabela)
@@ -703,6 +713,7 @@ public:
 		else
 		{
 			this->tabela = nullptr;
+			this->nr_tabele = 0;
 		}
 	}
 
@@ -750,7 +761,8 @@ public:
 		{
 			nr_tabele++;
 			tabela = new Tabela[nr_tabele];
-			tabela->SetNume_tabela(x.c_str);
+			tabela->SetNume_tabela((char*x.c_str());
+			tabela->SetNr_coloane(1);
 		}
 		else
 		{
@@ -775,6 +787,7 @@ public:
 				tabela[i] = copie[i];
 			}
 			delete[] copie;
+			tabela->SetNume_tabela((char*)x.c_str());
 		}
 	}
 
@@ -783,6 +796,7 @@ public:
 		if (nr_tabele > 0)
 		{
 			Tabela auxi;
+			Tabela* copie = new Tabela[nr_tabele];
 			for (int i = 0; i < nr_tabele; i++)
 			{
 				if (x == tabela[i].GetNume_tabela())
@@ -792,7 +806,6 @@ public:
 			}
 			for (int i = 0; i < nr_tabele; i++)
 			{
-				Tabela* copie = new Tabela[nr_tabele];
 				if (tabela[i] == auxi)
 				{
 					copie[i] = tabela[i];
@@ -815,7 +828,13 @@ public:
 
 	void Display_table(string x)							//afiseaza tabela cu numele x
 	{
-		//de facut
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (x == tabela[i].GetNume_tabela())
+			{
+				cout << tabela[i];
+			}
+		}
 	}
 	
 
