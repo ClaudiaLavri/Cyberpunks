@@ -664,10 +664,7 @@ istream& operator>>(istream& in, Tabela& t)
 	
 	return in;
 }
-//////////////////////operator>> Tabela
-//////////{
-///////
-///////}
+
 
 class Inregistrare
 {
@@ -703,12 +700,12 @@ public:
 		this->nr_tabele = 0;
 	}
 
-	Database(Tabela* tabela)
+	Database(Tabela* tabela, int nr_tabele)
 	{
 		if (tabela != nullptr)
 		{
 			this->tabela = tabela;
-			this->nr_tabele++;
+			this->nr_tabele=nr_tabele;
 		}
 		else
 		{
@@ -722,7 +719,7 @@ public:
 		if (database.tabela != nullptr)
 		{
 			this->tabela = database.tabela;
-			this->nr_tabele++;
+			this->nr_tabele = database.nr_tabele;
 		}
 		else
 		{
@@ -738,8 +735,9 @@ public:
 		}
 		if (database.tabela != nullptr)
 		{
+			this->tabela = new Tabela[nr_tabele];
 			this->tabela = database.tabela;
-			this->nr_tabele++;
+			this->nr_tabele = database.nr_tabele;
 		}
 		else
 		{
@@ -899,6 +897,7 @@ public:
 	void compara(string text_utilizator)
 	{
 		int gasit = -1;
+		Database data;
 		string text_comenzi[7] = { create, display, drop, insert, delete_from, select, update };
 		for (int i = 0; i < 7; i++)
 		{
@@ -907,7 +906,12 @@ public:
 			{
 				if (i == 0)
 				{
-
+					text_utilizator.erase(gasit, text_comenzi[i].length());
+					string x;
+					int capat1 = text_utilizator.find(" ")+1;
+					int capat2 = text_utilizator.find(" ((");
+					x = text_utilizator.substr(capat1, capat2);
+					data.New_table(x);
 				}
 				if (i == 1)
 				{
