@@ -101,4 +101,22 @@ int main()
 	Tabela t;
 	cin >> t;
 	cout << t;
+	
+	//testare Display_table si Drop_table
+	Coloana* col1 = new Coloana[2];									//creare coloane
+	Coloana c1((char*)"Nume", (char*)"text", 20, (char*)"N/a");
+	Coloana c2((char*)"Prenume", (char*)"text", 20, (char*)"N/a");
+	col1[0] = c1;
+	col1[1] = c2;
+	Tabela* tab = new Tabela[1];									//creare tabela
+	tab->SetNume_tabela((char*)"Clienti");
+	tab->SetNr_coloane(2);
+	tab->SetColoana(col1, 2);
+	Database d(tab);												//creare database
+	d.Display_table(tab->GetNume_tabela());
+	d.Drop_table(tab->GetNume_tabela());
+	d.Drop_table("Produse");
+	
+	
+	
 }
