@@ -665,27 +665,147 @@ istream& operator>>(istream& in, Tabela& t)
 	return in;
 }
 
-
 class Inregistrare
 {
 private:
 	static int id;
-	int nr_verificare=0;
-	char* valoare;
+	//int nr_verificare = 0;
+	string* valoare;
+	int capacitate;
 public:
 	Inregistrare()
 	{
-		this->valoare = new char[strlen("N/A") + 1];
-		strcpy_s(this->valoare, strlen("N/A") + 1, "N/A");
-
-		this->nr_verificare++;
+		this->valoare = nullptr;
+		this->capacitate = 0;
 	}
 
-	Inregistrare()
+	Inregistrare(string* valoare, int capacitate)
 	{
-
+		if (capacitate > 0)
+		{
+			this->capacitate = capacitate;
+			this->valoare = new string[capacitate];
+			for (int i = 0; i < capacitate; i++)
+			{
+				this->valoare[i] = valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+		
 	}
+
+	Inregistrare(const Inregistrare& x)
+	{
+		if (x.capacitate > 0)
+		{
+			this->capacitate = x.capacitate;
+			this->valoare = new string[x.capacitate];
+			for (int i = 0; i < x.capacitate; i++)
+			{
+				this->valoare[i] = x.valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+	}
+
+	Inregistrare& operator=(Inregistrare& x)
+	{
+		if (this->valoare != nullptr)
+		{
+			delete[] this->valoare;
+		}
+
+		if (x.capacitate > 0)
+		{
+			this->capacitate = x.capacitate;
+			this->valoare = new string[x.capacitate];
+			for (int i = 0; i < x.capacitate; i++)
+			{
+				this->valoare[i] = x.valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+
+		return *this;
+	}
+
+	~Inregistrare()
+	{
+		if (this->valoare != nullptr)
+		{
+			delete[] this->valoare;
+		}
+	}
+
+	//getteri
+	string* getValoare()
+	{
+		return this->valoare;
+	}
+
+	int getCapacitate()
+	{
+		return this->capacitate;
+	}
+
+	//setteri
+	void setValoare(string* valoare)
+	{
+		if (valoare != nullptr)
+		{
+			for (int i = 0; i < this->capacitate; i++)
+			{
+				this->valoare[i] = valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+		}
+	}
+
+	void setCapacitate(int capacitate)
+	{
+		if (capacitate > 0)
+		{
+			this->capacitate = capacitate;
+		}
+		else
+		{
+			this->capacitate = 0;
+		}
+	}
+
+	friend ostream& operator<<(ostream& out, Inregistrare);
+	friend istream& operator>>(istream& in, Inregistrare&);
 };
+
+ostream& operator<<(ostream& out, Inregistrare x)
+{
+	out << endl;
+	for (int i = 0; i < x.capacitate; i++)
+	{
+		out << x.valoare[i] << "\t";
+	}
+	out << endl;
+}
+
+istream& operator>>(istream& in, Inregistrare& x)
+{
+	//de facut
+}
 
 class Database
 {
