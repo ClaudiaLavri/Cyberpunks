@@ -407,7 +407,7 @@ public:
 
 	Tabela(const Tabela& t)										//constructor de copiere
 	{
-		if (nume_tabela != nullptr)
+		if (t.nume_tabela != nullptr)
 		{
 			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
 			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
