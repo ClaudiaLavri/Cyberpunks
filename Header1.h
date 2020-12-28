@@ -618,6 +618,41 @@ public:
 	{
 		return  this->nr_coloane=t.nr_coloane ;
 	}
+	
+		void New_coloana(string x, string tip, int dimensiune, string val_implicita)
+	{
+		if (nr_coloane == 0)
+		{
+			nr_coloane++;
+			col = new Coloana[nr_coloane];
+			col->setNumeColoana((char*)x.c_str());
+			col->setDimensiune(dimensiune);
+			col->setTip((char*)tip.c_str());
+			col->setValImplicita((char*)val_implicita.c_str());
+
+		}
+		else
+		{
+			Coloana* copie = new Coloana[nr_coloane + 1];
+			for (int i = 0; i < this->nr_coloane; i++)
+			{
+				copie[i] = col[i];
+			}
+			delete[] col;
+			nr_coloane++;
+			col = new Coloana[nr_coloane + 1];
+			for (int i = 0; i < this->nr_coloane - 1; i++)
+			{
+				col[i] = copie[i];
+			}
+			delete[] copie;
+			col->setNumeColoana((char*)x.c_str());
+			col->setDimensiune(dimensiune);
+			col->setTip((char*)tip.c_str());
+			col->setValImplicita((char*)val_implicita.c_str());
+		}
+	}
+	
 	friend class Coloana;
 	friend ostream& operator<<(ostream& out, Tabela);
 	friend istream& operator>>(istream& in, Tabela&);
@@ -998,8 +1033,8 @@ public:
 		cout << "INSERT INTO table_name VALUES(...)" << endl;
 		cout << "DELETE FROM nume_tabela WHERE nume_coloana = valoare" << endl;
 		cout << "SELECT (cel_putin_o_coloana, ...) | ALL FROM nume_tabela [WHERE nume_coloana = valoare] - clauza WHERE este optionala" << endl;
-		cout << "UPDATE nume_tabela SET nume_coloana = valoare WHERE nume_coloana = valoare" << endl;
-		cin >> text_utilizator;
+		cout << "UPDATE nume_tabela SET nume_coloana = valoare WHERE nume_coloana = valoare" << endl << endl;
+		getline(cin, text_utilizator);
 	}
 
 	RecunoastereText(string text_utilizator)
@@ -1019,49 +1054,54 @@ public:
 		int gasit = -1;
 		Database data;
 		string text_comenzi[7] = { create, display, drop, insert, delete_from, select, update };
-		for (int i = 0; i < 7; i++)
+		while (text_utilizator != "STOP")
 		{
-			gasit = text_utilizator.find(text_comenzi[i]);
-			if (gasit != string::npos)
+			for (int i = 0; i < 7; i++)
 			{
-				if (i == 0)
+				gasit = text_utilizator.find(text_comenzi[i]);
+				if (gasit != string::npos)
 				{
-					text_utilizator.erase(gasit, text_comenzi[i].length());
-					string x;
-					int capat1 = text_utilizator.find(" ")+1;
-					int capat2 = text_utilizator.find(" ((");
-					x = text_utilizator.substr(capat1, capat2);
-					data.New_table(x);
-				}
-				if (i == 1)
-				{
+					if (i == 0)
+					{
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ")+1;
+						int capat2 = text_utilizator.find(" ((");
+						x = text_utilizator.substr(capat1, capat2);
+						data.New_table(x);
+						cout << "A fost creata tabela " << x << endl;
+						getline(cin, text_utilizator);
+					}
+					if (i == 1)
+					{
 
-				}
-				if (i == 2)
-				{
+					}
+					if (i == 2)
+					{
 
-				}
-				if (i == 3)
-				{
+					}
+					if (i == 3)
+					{
 
-				}
-				if (i == 4)
-				{
+					}
+					if (i == 4)
+					{
 
-				}
-				if (i == 5)
-				{
+					}
+					if (i == 5)
+					{
 
-				}
-				if (i == 6)
-				{
+					}
+					if (i == 6)
+					{
 
+					}
+					if (i == 7)
+					{
+	
+					}
 				}
-				if (i == 7)
-				{
-
-				}
-			}
+			}	
 		}
 	}
 };
