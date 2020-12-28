@@ -119,4 +119,11 @@ int main()
 	
 	
 	
+	//PROGRAM MAIN
+	Database d;
+	RecunoastereText r;
+	r.compara();
+	
+	
+	
 }
