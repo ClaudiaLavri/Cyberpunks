@@ -1206,11 +1206,19 @@ public:
 					}
 					if (i == 1)
 					{
-
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						x = text_utilizator.substr(capat1);
+						data.Display_table(x);
 					}
 					if (i == 2)
 					{
-
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						x = text_utilizator.substr(capat1);
+						data.Drop_table(x);
 					}
 					if (i == 3)
 					{
