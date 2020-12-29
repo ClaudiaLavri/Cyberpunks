@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-	//EDI
+	
 	//Testare clasa Coloana
 
 	Coloana c;
@@ -117,6 +117,55 @@ int main()
 	d.Drop_table(tab->GetNume_tabela());
 	d.Drop_table("Produse");
 	
+	//Testare operatori Tabela
+	Tabela t1;
+	cin >> t1;
+	Tabela t2;
+	cin >> t2;
+	
+	cout << (t1 + t2) << endl;
+	cout << t1 - t2 << endl;
+	cout << t1++<<endl;
+	cout << (t1 > t2)<<endl; 
+	t2 == t1; 
+	cout << t2<< endl;
+	cout << t1[3]<<endl; 
+	cout << (int)t1<<endl; 
+	cout << !t2; 
+	
+	//Testare operatori Coloana
+
+	Coloana c1;
+	cin >> c1;
+	Coloana c2;
+	cin >> c2;
+
+	cout << c1 + c2 << endl;
+	cout << c1 - c2 << endl;
+	cout << c1++<<endl;//merge
+	cout << (c1 > c2) << endl; 
+	c2 == c1; 
+	cout << c2 << endl; 
+	cout << c1[3] << endl; 
+	cout << (int)c1 << endl; 
+	cout << !c2; 
+
+	//Testare operatori Inregistrare
+
+	Inregistrare i1;
+	cin >> i1;
+	Inregistrare i2;
+	cin >> i2;
+
+	cout << i1 + i2 << endl;
+	cout << i1 - i2 << endl;
+	cout << i1++ << endl;
+	cout << (i1 > i2) << endl; 
+	i2 == i1; 
+	cout << i2 << endl;
+	//cout << i1[3] << endl; 
+	cout << (int)i1 << endl; 
+	cout << !i2; 
 	
 	
 	//PROGRAM MAIN
