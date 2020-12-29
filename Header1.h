@@ -12,6 +12,7 @@ private:
 	int dimensiune;
 	char* val_implicita;
 public:
+	//constructor implicit
 	Coloana()
 	{
 		this->nume_coloana = new char[strlen("Coloana") + 1];
@@ -23,6 +24,7 @@ public:
 		strcpy_s(this->val_implicita, strlen("Necunoscuta") + 1, "Necunoscuta");
 	}
 	
+	//constructor cu parametrii
 	Coloana(char* nume_coloana, char* tip_coloana, int dimensiune, char* val_implicita)
 	{
 		if (nume_coloana != nullptr)
@@ -68,6 +70,7 @@ public:
 		}
 	}
 
+	//constructor de copiere
 	Coloana(const Coloana& c)
 	{
 		if (c.nume_coloana != nullptr)
@@ -113,6 +116,7 @@ public:
 		}
 	}
 
+	//supraincarcare operator =
 	Coloana& operator=(Coloana& c)
 	{
 		if (this->nume_coloana != nullptr)
@@ -163,6 +167,7 @@ public:
 		return *this;
 	}
 	
+	//destructor
 	~Coloana()
 	{
 		if (this->nume_coloana != nullptr)
@@ -179,6 +184,7 @@ public:
 		}
 	}
 
+	//setter nume_coloana
 	void setNumeColoana(char* nume_coloana)
 	{
 		if (nume_coloana != nullptr)
@@ -187,6 +193,7 @@ public:
 		}
 	}
 
+	//setter tip_coloana
 	void setTip(char* tip_coloana)
 	{
 		if (tip_coloana != nullptr)
@@ -195,6 +202,7 @@ public:
 		}
 	}
 
+	//setter dimensiune
 	void setDimensiune(int dimensiune)
 	{
 		if (dimensiune > 0)
@@ -203,6 +211,7 @@ public:
 		}
 	}
 
+	//setter val_implicita
 	void setValImplicita(char* val_implicita)
 	{
 		if (val_implicita != 0)
@@ -211,39 +220,46 @@ public:
 		}
 	}
 
+	//getter nume_coloana
 	char* getNumeColoana()
 	{
 		return this->nume_coloana;
 	}
 
+	//getter tip_coloana
 	char* getTipColoana()
 	{
 		return this->tip_coloana;
 	}
 
+	//getter dimensiune
 	int getDimensiune()
 	{
 		return this->dimensiune;
 	}
 
+	//getter val_implicita
 	char* getValImplicita()
 	{
 		return this->val_implicita;
 	}
 	
 	//Supraincarcare operatori Coloane
-
+	
+	//supraincarcare operator !
 	bool operator!()
 	{
 		return val_implicita != nullptr;
 	}
 
+	//supraincarcare operator ++
 	Coloana operator++()
 	{
 		dimensiune++;
 		return *this;
 	}
 
+	//supraincarcare operator ++(int i)
 	Coloana operator++(int i)
 	{
 		Coloana copie = *this;
@@ -251,12 +267,14 @@ public:
 		return copie;
 	}
 
+	//supraincarcare operator --
 	Coloana operator--()
 	{
 		dimensiune--;
 		return *this;
 	}
 
+	//supraincarcare operator --(int i)
 	Coloana operator--(int i)
 	{
 		Coloane copie = *this;
@@ -264,6 +282,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcare operator +
 	Coloana operator+(Coloane t)
 	{
 		Coloane copie = *this;
@@ -271,6 +290,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcare operator -
 	Coloana operator-(Coloane t)
 	{
 		Coloana copie = *this;
@@ -285,6 +305,7 @@ public:
 		}
 	}
 
+	//supraincarcare operator []
 	int operator[](int index)
 	{
 		if (index >= 0 && index < strlen(tip_coloana))
@@ -297,16 +318,19 @@ public:
 		}
 	}
 
+	//supraincarcare operator ()
 	operator int()
 	{
 		return dimensiune;
 	}
 
+	//supraincarcare operator >
 	bool operator >(Coloana t)
 	{
-		return this->dimensiune < t.dimensiune;
+		return this->dimensiune > t.dimensiune;
 	}
 
+	//supraincarcare operator ==
 	bool operator==(Coloana& t)
 	{
 		return  this->tip=t.tip ;
@@ -317,6 +341,7 @@ public:
 	friend istream& operator>>(istream& in, Coloana&);
 };
 
+//operator de afisare clasa Coloana
 ostream& operator<<(ostream& out, Coloana c)
 {
 	out << "Nume Coloana\tTip\tDimensiune\tValoare Implicita";
@@ -325,7 +350,7 @@ ostream& operator<<(ostream& out, Coloana c)
 	return out;
 }
 
-
+//operator de citire clasa Coloana
 istream& operator>>(istream& in, Coloana& c)
 {
 	//in >> ws;
@@ -362,7 +387,8 @@ private:
 	int nr_coloane;
 	Coloana* col;
 public:
-	Tabela()											//constructor implicit
+	//constructor implicit
+	Tabela()
 	{
 		nume_tabela = new char[strlen("Tabel") + 1];
 		strcpy_s(nume_tabela, strlen("Tabel") + 1, "Tabel");
@@ -370,7 +396,8 @@ public:
 		col = nullptr;
 	}
 
-	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana)					//consrtuctor cu parametrii
+	//constructor cu parametrii
+	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -392,7 +419,8 @@ public:
 		}
 	}
 
-	~Tabela()					 						//destructor
+	//destructor
+	~Tabela()
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -405,7 +433,8 @@ public:
 		}
 	}
 
-	Tabela(const Tabela& t)										//constructor de copiere
+	//constructor de copiere
+	Tabela(const Tabela& t)
 	{
 		if (t.nume_tabela != nullptr)
 		{
@@ -433,7 +462,8 @@ public:
 		}
 	}
 
-	Tabela& operator=(const Tabela& t)				  				//supraincarcare operator =
+	//supraincarcare operator =
+	Tabela& operator=(const Tabela& t)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -463,9 +493,11 @@ public:
 				this->col[i] = t.col[i];
 			}
 		}
+		return *this;
 	}
 
-	void SetNume_tabela(char* nume_tabela)									//setter nume tabela
+	//setter nume_tabela
+	void SetNume_tabela(char* nume_tabela)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -478,7 +510,8 @@ public:
 		}
 	}
 
-	char* GetNume_tabela()						 					//getter nume tabela
+	//getter nume_tabela
+	char* GetNume_tabela()
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -490,7 +523,8 @@ public:
 		}
 	}
 
-	void SetNr_coloane(int nr_coloane)					 				//setter numar coloane
+	//setter nr_coloane
+	void SetNr_coloane(int nr_coloane)
 	{
 		if (nr_coloane > 0)
 		{
@@ -498,7 +532,8 @@ public:
 		}
 	}
 
-	int GetNr_coloane()							  				//getter numar coloane
+	//getter nr_coloane
+	int GetNr_coloane()
 	{
 		if (this->nr_coloane > 0)
 		{
@@ -510,7 +545,8 @@ public:
 		}
 	}
 
-	void SetColoana(Coloana* col, int nr_coloane)								//setter coloane
+	//setter coloane
+	void SetColoana(Coloana* col, int nr_coloane)
 	{
 		if (nr_coloane > 0 && col != nullptr)
 		{
@@ -526,7 +562,8 @@ public:
 		}
 	}
 
-	Coloana* GetColoana()											//getter coloane
+	//getter coloane
+	Coloana* GetColoana()
 	{
 		if (this->col != nullptr)
 		{
@@ -540,30 +577,35 @@ public:
 	
 	//Supraincarcare operatori
 
+	//supraincarcare operator !
 	bool operator!()
 	{
 		return nume_tabela != 0;
 	}
 
+	//supraincarcare operator ++
 	Tabela operator++()
 	{
 		nr_coloane++;
 		return *this;
 	}
 
+	//supraincarcare operator ++(int i)
 	Tabela operator++(int i)
 	{
 		Tabela copie = *this;
-		nr_coloane++;
+		this->nr_coloane++;
 		return copie;
 	}
 
+	//supraincarcare operator --
 	Tabela operator--()
 	{
 		nr_coloane--;
 		return *this;
 	}
 
+	//supraincarcare operator --(int i)
 	Tabela operator--(int i)
 	{
 		Tabela copie = *this;
@@ -571,6 +613,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcare operator +
 	Tabela operator+(Tabela t)
 	{
 		Tabela copie = *this;
@@ -578,6 +621,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcare operator -
 	Tabela operator-(Tabela t)
 	{
 		Tabela copie = *this;
@@ -592,6 +636,7 @@ public:
 		}
 	}
 
+	//supraincarcare operator []
 	int operator[](int index)
 	{
 		if (index >= 0 && index < strlen(nume_tabela))
@@ -604,22 +649,26 @@ public:
 		}
 	}
 
+	//supraincarcare operator ()
 	operator int()
 	{
 		return nr_coloane;
 	}
 
+	//supraincarcare operator >
 	bool operator >(Tabela t)
 	{
-		return this->nr_coloane < t.nr_coloane;
+		return this->nr_coloane > t.nr_coloane;
 	}
 
+	//supraincarcare operator ==
 	bool operator==(Tabela& t)
 	{
 		return  this->nr_coloane=t.nr_coloane ;
 	}
 	
-		void New_coloana(string x, string tip, int dimensiune, string val_implicita)
+	//functie pentru generarea unei noi coloane
+	void New_coloana(string x, string tip, int dimensiune, string val_implicita)
 	{
 		if (nr_coloane == 0)
 		{
@@ -658,6 +707,7 @@ public:
 	friend istream& operator>>(istream& in, Tabela&);
 };
 
+//supraincarcare operator << pentru clasa Tabela
 ostream& operator<<(ostream& out, Tabela d)
 {
 	out << d.nume_tabela << endl;
@@ -669,6 +719,7 @@ ostream& operator<<(ostream& out, Tabela d)
 	return out;
 }
 
+//supraincarcare operator >> pentru clasa Tabela
 istream& operator>>(istream& in, Tabela& t)
 {
 	cout << "Nume tabela: ";
@@ -708,12 +759,14 @@ private:
 	string* valoare;
 	int capacitate;
 public:
+	//constructor implicit
 	Inregistrare()
 	{
 		this->valoare = nullptr;
 		this->capacitate = 0;
 	}
 
+	//constructor cu parametrii
 	Inregistrare(string* valoare, int capacitate)
 	{
 		if (capacitate > 0)
@@ -730,9 +783,9 @@ public:
 			this->valoare = nullptr;
 			this->capacitate = 0;
 		}
-		
 	}
 
+	//constructor de copiere
 	Inregistrare(const Inregistrare& x)
 	{
 		if (x.capacitate > 0)
@@ -751,6 +804,7 @@ public:
 		}
 	}
 
+	////supraincarcare operator =
 	Inregistrare& operator=(Inregistrare& x)
 	{
 		if (this->valoare != nullptr)
@@ -776,6 +830,7 @@ public:
 		return *this;
 	}
 
+	//destructor
 	~Inregistrare()
 	{
 		if (this->valoare != nullptr)
@@ -784,18 +839,19 @@ public:
 		}
 	}
 
-	//getteri
+	//getter valoare
 	string* getValoare()
 	{
 		return this->valoare;
 	}
 
+	//getter capacitate
 	int getCapacitate()
 	{
 		return this->capacitate;
 	}
 
-	//setteri
+	//setter valoare
 	void setValoare(string* valoare)
 	{
 		if (valoare != nullptr)
@@ -811,6 +867,7 @@ public:
 		}
 	}
 
+	//setter capacitate
 	void setCapacitate(int capacitate)
 	{
 		if (capacitate > 0)
@@ -827,6 +884,7 @@ public:
 	friend istream& operator>>(istream& in, Inregistrare&);
 };
 
+//supraincarcare operator << pentru clasa Inregistrare
 ostream& operator<<(ostream& out, Inregistrare x)
 {
 	out << endl;
@@ -837,6 +895,7 @@ ostream& operator<<(ostream& out, Inregistrare x)
 	out << endl;
 }
 
+//supraincarcare operator >> pentru clasa Inregistrare
 istream& operator>>(istream& in, Inregistrare& x)
 {
 	//de facut
@@ -848,13 +907,14 @@ private:
 	Tabela* tabela;
 	int nr_tabele = 0;
 public:
-	
+	//constructor implicit
 	Database()
 	{
 		this->tabela = nullptr;
 		this->nr_tabele = 0;
 	}
 
+	//constructor cu parametrii
 	Database(Tabela* tabela, int nr_tabele)
 	{
 		if (tabela != nullptr)
@@ -869,6 +929,7 @@ public:
 		}
 	}
 
+	//constructor de copiere
 	Database(const Database& database)
 	{
 		if (database.tabela != nullptr)
@@ -882,6 +943,7 @@ public:
 		}
 	}
 
+	//supraincarcare operator =
 	Database& operator=(Database& database)
 	{
 		if (this->tabela != nullptr)
@@ -900,6 +962,7 @@ public:
 		}
 	}
 
+	//destructor
 	~Database()
 	{
 		if (this->tabela != nullptr)
@@ -908,7 +971,8 @@ public:
 		}
 	}
 	
-	void New_table(string x)									//creeaza o noua tabela
+	//functie pentru generarea unei noi tabele
+	void New_table(string x)
 	{
 		if (nr_tabele == 0)
 		{
@@ -944,7 +1008,8 @@ public:
 		}
 	}
 
-	void Drop_table(string x)								//sterge tabela cu numele x
+	//functie pentru stergerea unei coloane
+	void Drop_table(string x)
 	{
 		if (nr_tabele > 0)
 		{
@@ -979,7 +1044,8 @@ public:
 		}
 	}
 
-	void Display_table(string x)							//afiseaza tabela cu numele x
+	//functie pentru afisarea unei coloane
+	void Display_table(string x)
 	{
 		for (int i = 0; i < nr_tabele; i++)
 		{
@@ -995,6 +1061,7 @@ public:
 	friend istream& operator>>(istream& in, Database&);
 };
 
+//supraincarcarea operatorului << pentru clasa Database					       
 ostream& operator<<(ostream& out, Database d)
 {
 	for (int i = 0; i < d.nr_tabele; i++)
@@ -1004,6 +1071,7 @@ ostream& operator<<(ostream& out, Database d)
 	return out;
 }
 
+//supraincarcarea operatorului >> pentru clasa Database					       
 istream& operator>>(istream& in, Database& d)
 {
 	for (int i = 0; i < d.nr_tabele; i++)
@@ -1049,6 +1117,7 @@ public:
 		this->text_utilizator = text_utilizator;
 	}
 
+	//functie pentru compararea valorii introduse de utilizator
 	void compara(string text_utilizator)
 	{
 		int gasit = -1;
