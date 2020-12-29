@@ -614,10 +614,10 @@ public:
 	}
 
 	//supraincarcare operator +
-	Tabela operator+(Tabela t)
+	Tabela operator+(int x)
 	{
 		Tabela copie = *this;
-		copie.nr_coloane = nr_coloane + t.nr_coloane;
+		copie.nr_coloane = x + nr_coloane;
 		return copie;
 	}
 
@@ -880,6 +880,60 @@ public:
 		}
 	}
 
+	//Supraincarcare operatori
+
+	bool operator!()
+	{
+		return valoare != nullptr;
+	}
+
+	Inregistrare operator++()
+	{
+		capacitate++;
+		return *this;
+	}
+
+	Inregistrare operator++(int i)
+	{
+		Inregistrare copie = *this;
+		capacitate++;
+		return copie;
+	}
+
+	Inregistrare operator--()
+	{
+		capacitate--;
+		return *this;
+	}
+
+	Inregistrare operator--(int i)
+	{
+		Inregistrare copie = *this;
+		capacitate--;
+		return copie;
+	}
+
+	Inregistrare operator+(int x)
+	{
+		Inregistrare copie = *this;
+		copie.capacitate = x + capacitate;
+		return copie;
+	}
+
+	Inregistrare operator-(Inregistrare t)
+	{
+		Inregistrare copie = *this;
+		if (capacitate >= t.capacitate)
+		{
+			copie.capacitate = capacitate - t.capacitate;
+			return copie;
+		}
+		else
+		{
+			cout << "Capacitatea nu poate fi negativa" << endl;
+		}
+	}
+	
 	friend ostream& operator<<(ostream& out, Inregistrare);
 	friend istream& operator>>(istream& in, Inregistrare&);
 };
@@ -898,7 +952,16 @@ ostream& operator<<(ostream& out, Inregistrare x)
 //supraincarcare operator >> pentru clasa Inregistrare
 istream& operator>>(istream& in, Inregistrare& x)
 {
-	//de facut
+	cout << "Capacitate: ";
+	in >> x.capacitate;
+	in >> ws;
+	cout << "Valori: ";
+	x.valoare = new string[x.capacitate];
+	for (int i = 0; i < x.capacitate; i++)
+	{
+		getline(in, x.valoare[i]);
+	}
+	return in;
 }
 
 class Database
