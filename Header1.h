@@ -1200,9 +1200,63 @@ public:
 						int capat1 = text_utilizator.find(" ")+1;
 						int capat2 = text_utilizator.find(" ((");
 						x = text_utilizator.substr(capat1, capat2);
-						data.New_table(x);
-						cout << "A fost creata tabela " << x << endl;
-						getline(cin, text_utilizator);
+						int nr_col = 0;
+					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), "(") - 1;
+					char** nume_coloane = new char* [nr_col];
+					char** tip_coloane = new char* [nr_col];
+					int* dimensiune_coloane = new int[nr_col];
+					char** valori_implicite = new char* [nr_col];
+					text_utilizator.erase(0, x.length());
+					text_utilizator.erase(0, strlen(" (("));
+					for (int j = 0; j < nr_col; j++)
+					{
+						int p=0;
+						int verificare = 0;
+						
+						while (text_utilizator[p] != ')')
+						{
+							if (text_utilizator[p] == ',')
+							{
+								verificare++;
+							}
+							p++;
+						}
+						if (verificare != 3)
+						{
+							cout << "Comanda scrisa incorect!" << endl;
+							break;
+						}
+
+						int pos = text_utilizator.find(',');
+						char* nume = (char*)(text_utilizator.substr(0, pos)).c_str();
+						strcpy_s(nume_coloane[j], strlen(nume) + 1, nume);
+						text_utilizator.erase(0, strlen(nume));
+						text_utilizator.erase(0, strlen(","));
+
+						pos = text_utilizator.find(',');
+						char* tip = (char*)(text_utilizator.substr(0, pos)).c_str();
+						strcpy_s(tip_coloane[j], strlen(tip) + 1, tip);
+						text_utilizator.erase(0, strlen(tip));
+						text_utilizator.erase(0, strlen(","));
+
+						pos = text_utilizator.find(',');
+						int dim = std::stoi(text_utilizator.substr(0, pos));
+						text_utilizator.erase(0, text_utilizator.substr(0, pos).length());
+						text_utilizator.erase(0, strlen(","));
+
+						pos = text_utilizator.find(')');
+						char* valoare = (char*)(text_utilizator.substr(0, pos)).c_str();
+						strcpy_s(valori_implicite[j], strlen(valoare) + 1, valoare);
+						text_utilizator.erase(0, strlen(valoare));
+
+						if (text_utilizator.substr(0, text_utilizator.length()) == "))")
+						{
+							break;
+						}
+						text_utilizator.erase(0, strlen("), ("));
+					}
+					data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite);
+					getline(cin, text_utilizator);
 					}
 					if (i == 1)
 					{
@@ -1211,6 +1265,7 @@ public:
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Display_table(x);
+						getline(cin, text_utilizator);
 					}
 					if (i == 2)
 					{
@@ -1219,6 +1274,7 @@ public:
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Drop_table(x);
+						getline(cin, text_utilizator);
 					}
 					if (i == 3)
 					{
@@ -1235,10 +1291,6 @@ public:
 					if (i == 6)
 					{
 
-					}
-					if (i == 7)
-					{
-	
 					}
 				}
 			}	
