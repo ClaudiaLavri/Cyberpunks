@@ -682,19 +682,19 @@ public:
 		}
 		else
 		{
-			Coloana* copie = new Coloana[nr_coloane + 1];
-			for (int i = 0; i < this->nr_coloane; i++)
-			{
-				copie[i] = col[i];
-			}
-			delete[] col;
-			nr_coloane++;
-			col = new Coloana[nr_coloane + 1];
-			for (int i = 0; i < this->nr_coloane - 1; i++)
-			{
-				col[i] = copie[i];
-			}
-			delete[] copie;
+			//Coloana* copie = new Coloana[nr_coloane];
+			//for (int i = 0; i < this->nr_coloane; i++)
+			//{
+			//	copie[i] = col[i];
+			//}
+			//delete[] col;
+			//nr_coloane++;
+			col = new Coloana[nr_coloane];
+			//for (int i = 0; i < this->nr_coloane - 1; i++)
+			//{
+			//	col[i] = copie[i];
+			//}
+			//delete[] copie;
 			col->setNumeColoana((char*)x.c_str());
 			col->setDimensiune(dimensiune);
 			col->setTip((char*)tip.c_str());
@@ -1035,18 +1035,23 @@ public:
 	}
 	
 	//functie pentru generarea unei noi tabele
-	void New_table(string x)
+	void New_table(string x, char** nume_coloane, char** tip_coloane, int* dimensiune_coloane, char** valori_implicite, int nr_col)									//creeaza o noua tabela
 	{
 		if (nr_tabele == 0)
 		{
 			nr_tabele++;
 			tabela = new Tabela[nr_tabele];
-			tabela->SetNume_tabela((char*x.c_str());
-			tabela->SetNr_coloane(1);
+			tabela->SetNume_tabela((char*)x.c_str());
+			tabela->SetNr_coloane(nr_col);
+			//tabela->New_coloana;
+			for (int i = 0; i < nr_col; i++)
+			{
+				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i]);
+			}
 		}
 		else
 		{
-			for (int i = 0; i < nr_tabele; i++)
+			for (int i = 0; i < this->nr_tabele; i++)
 			{
 				if (x == tabela[i].GetNume_tabela())
 				{
@@ -1068,9 +1073,9 @@ public:
 			}
 			delete[] copie;
 			tabela->SetNume_tabela((char*)x.c_str());
+			tabela->SetNr_coloane(1);
 		}
 	}
-
 	//functie pentru stergerea unei coloane
 	void Drop_table(string x)
 	{
@@ -1195,12 +1200,12 @@ public:
 				{
 					if (i == 0)
 					{
-						text_utilizator.erase(gasit, text_comenzi[i].length());
-						string x;
-						int capat1 = text_utilizator.find(" ")+1;
-						int capat2 = text_utilizator.find(" ((");
-						x = text_utilizator.substr(capat1, capat2);
-						int nr_col = 0;
+					text_utilizator.erase(gasit, text_comenzi[i].length());
+					string x;
+					int capat1 = text_utilizator.find(" ")+1;
+					int capat2 = text_utilizator.find(" ((");
+					x = text_utilizator.substr(capat1, capat2);
+					int nr_col = 0;
 					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), "(") - 1;
 					char** nume_coloane = new char* [nr_col];
 					char** tip_coloane = new char* [nr_col];
@@ -1228,24 +1233,28 @@ public:
 						}
 
 						int pos = text_utilizator.find(',');
-						char* nume = (char*)(text_utilizator.substr(0, pos)).c_str();
+						char* nume = new char[pos + 1];
+						strcpy_s(nume, pos +1, (char*)(text_utilizator.substr(0, pos)).c_str());
 						strcpy_s(nume_coloane[j], strlen(nume) + 1, nume);
 						text_utilizator.erase(0, strlen(nume));
-						text_utilizator.erase(0, strlen(","));
+						text_utilizator.erase(0, strlen(", "));
 
 						pos = text_utilizator.find(',');
-						char* tip = (char*)(text_utilizator.substr(0, pos)).c_str();
+						char* tip = new char[pos + 1];
+						strcpy_s(tip, pos+1, (char*)(text_utilizator.substr(0, pos)).c_str());
 						strcpy_s(tip_coloane[j], strlen(tip) + 1, tip);
 						text_utilizator.erase(0, strlen(tip));
-						text_utilizator.erase(0, strlen(","));
+						text_utilizator.erase(0, strlen(", "));
 
 						pos = text_utilizator.find(',');
 						int dim = std::stoi(text_utilizator.substr(0, pos));
+						dimensiune_coloane[j] = dim;
 						text_utilizator.erase(0, text_utilizator.substr(0, pos).length());
-						text_utilizator.erase(0, strlen(","));
+						text_utilizator.erase(0, strlen(", "));
 
 						pos = text_utilizator.find(')');
-						char* valoare = (char*)(text_utilizator.substr(0, pos)).c_str();
+						char* valoare = new char[pos + 1];
+						strcpy_s(valoare, pos+1, (char*)(text_utilizator.substr(0, pos)).c_str());
 						strcpy_s(valori_implicite[j], strlen(valoare) + 1, valoare);
 						text_utilizator.erase(0, strlen(valoare));
 
