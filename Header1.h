@@ -1318,6 +1318,7 @@ public:
 							text_utilizator.erase(0, valoare.length);
 							text_utilizator.erase(0, strlen(", "));
 						}
+						getline(cin, text_utilizator);
 					}
 					if (i == 4)
 					{
