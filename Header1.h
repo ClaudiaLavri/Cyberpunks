@@ -1202,7 +1202,7 @@ public:
 					text_utilizator.erase(gasit, text_comenzi[i].length());
 					string x;
 					int capat1 = text_utilizator.find(" ")+1;
-					int capat2 = text_utilizator.find(" ((");
+					int capat2 = text_utilizator.find(" ((")-1;
 					x = text_utilizator.substr(capat1, capat2);
 					int nr_col = 0;
 					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), "(") - 1;
@@ -1211,7 +1211,7 @@ public:
 					int* dimensiune_coloane = new int[nr_col];
 					char** valori_implicite = new char* [nr_col];
 					text_utilizator.erase(0, x.length());
-					text_utilizator.erase(0, strlen(" (("));
+					text_utilizator.erase(0, strlen(" ((")+1);
 					for (int j = 0; j < nr_col; j++)
 					{
 						int p=0;
@@ -1288,7 +1288,36 @@ public:
 					}
 					if (i == 3)
 					{
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						int capat2 = text_utilizator.find(" ") - 1;
+						x = text_utilizator.substr(capat1, capat2);
+						text_utilizator.erase(0, x.length());
+						text_utilizator.erase(0, strlen(" VALUES("));
 
+						int p = 0;
+						int nr_valori = 0;
+
+						while (text_utilizator[p] != ')')
+						{
+							if (text_utilizator[p] == ',')
+							{
+								nr_valori++;
+							}
+							p++;
+						}
+						nr_valori++;
+
+						string* valori = new string[nr_valori];
+						for (int j = 0; j < nr_valori; j++)
+						{
+							int pos = text_utilizator.find(',');
+							string valoare = text_utilizator.substr(0, pos);
+							valori[j] = valoare;
+							text_utilizator.erase(0, valoare.length);
+							text_utilizator.erase(0, strlen(", "));
+						}
 					}
 					if (i == 4)
 					{
