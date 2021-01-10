@@ -1291,33 +1291,45 @@ public:
 						text_utilizator.erase(gasit, text_comenzi[i].length());
 						string x;
 						int capat1 = text_utilizator.find(" ") + 1;
-						int capat2 = text_utilizator.find(" ") - 1;
+						int capat2 = text_utilizator.find(" V") - 1;
 						x = text_utilizator.substr(capat1, capat2);
 						text_utilizator.erase(0, x.length());
-						text_utilizator.erase(0, strlen(" VALUES("));
+						text_utilizator.erase(0, strlen(" VALUES(")+1);
 
 						int p = 0;
 						int nr_valori = 0;
 
 						while (text_utilizator[p] != ')')
 						{
-							if (text_utilizator[p] == ',')
-							{
-								nr_valori++;
-							}
-							p++;
+						if (text_utilizator[p] == ',')
+						{
+							nr_valori++;
+						}
+						p++;
 						}
 						nr_valori++;
 
-						string* valori = new string[nr_valori];
-						for (int j = 0; j < nr_valori; j++)
+					string* valori = new string[nr_valori];
+					for (int j = 0; j < nr_valori; j++)
+					{
+						int pos;
+						if (j == nr_valori - 1)
 						{
-							int pos = text_utilizator.find(',');
-							string valoare = text_utilizator.substr(0, pos);
-							valori[j] = valoare;
-							text_utilizator.erase(0, valoare.length);
-							text_utilizator.erase(0, strlen(", "));
+							pos = text_utilizator.find(')');
 						}
+						else
+						{
+							pos = text_utilizator.find(',');
+						}
+						string valoare = text_utilizator.substr(0, pos);
+						valori[j] = valoare;
+						text_utilizator.erase(0, valoare.length);
+						if (j == nr_valori - 1)
+						{
+							break;
+						}
+						text_utilizator.erase(0, strlen(", "));
+					}
 						getline(cin, text_utilizator);
 					}
 					if (i == 4)
