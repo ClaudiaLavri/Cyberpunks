@@ -1010,12 +1010,35 @@ public:
 			}
 		}
 	}
-
-	void Afisare_inregistrare(string nume)
+	void Delete_col(string nume_tabela, string nume_coloana)
 	{
-
+		bool egal = false;
+		for (int i = 0; i < this->nr_coloane; i++)
+		{
+			if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
+			{
+				egal = true;
+			}
+		}
+		if (egal == false)
+		{
+			cout << "Nu exista coloana " << nume_coloana;
+		}
+		if (egal == true)
+		{
+			for (int i = 0; i < this->nr_coloane; i++)
+			{
+				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
+				{
+					for (int i = 0; i < this->nr_coloane - 1; i++)
+					{
+						col[i] = col[i + 1];
+					}
+					this->nr_coloane--;
+				}
+			}
+		}
 	}
-
 	friend class Coloana;
 	friend ostream& operator<<(ostream& out, Tabela);
 	friend istream& operator>>(istream& in, Tabela&);
@@ -1249,6 +1272,17 @@ public:
 		}
 	}
 
+	void Delete_from_table(string nume_tabela, string nume_coloana)
+	{
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (strcmp(tabela->GetNume_tabela, nume_tabela.c_str()) == 0)
+			{
+				tabela->Delete_col(nume_tabela, nume_coloana);
+			}
+		}
+	}
+	
 	friend ostream& operator<<(ostream& out, Database);
 	friend istream& operator>>(istream& in, Database&);
 };
@@ -1472,7 +1506,16 @@ public:
 					}
 					if (i == 4)
 					{
-
+					text_utilizator.erase(gasit, text_comenzi[i].length());
+					string x;
+					int capat1 = text_utilizator.find(" ") + 1;
+					int capat2 = text_utilizator.find(" ") - 1;
+					x = text_utilizator.substr(capat1, capat2);
+					text_utilizator.erase(0, x.length());
+					text_utilizator.erase(0, strlen(" WHERE nume_coloana = ")+1);
+					string nume_coloana= text_utilizator.substr(0);
+					data.Delete_from_table(x, nume_coloana);
+					getline(cin, text_utilizator);
 					}
 					if (i == 5)
 					{
