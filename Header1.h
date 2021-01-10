@@ -1040,6 +1040,30 @@ public:
 			}
 		}
 	}
+	
+	void Schimbare_nume_coloana(string nume_coloana, string nume_nou)
+	{
+		bool ok = true;
+		for (int i = 0; i < nr_coloane; i++)
+		{
+			if (strcmp(this->col[i].getNumeColoana(), nume_nou.c_str()) == 0)
+			{
+				cout << "Exista deja o coloana cu numele " << nume_nou << endl;
+				ok = false;
+			}
+		}
+		if (ok == true)
+		{
+			for (int i = 0; i < nr_coloane; i++)
+			{
+				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
+				{
+					this->col[i].setNumeColoana((char*)nume_nou.c_str());
+				}
+			}
+		}
+	}
+	
 	friend class Coloana;
 	friend ostream& operator<<(ostream& out, Tabela);
 	friend istream& operator>>(istream& in, Tabela&);
@@ -1285,6 +1309,17 @@ public:
 		}
 	}
 	
+	void Update_coloana_din_tabela(string nume_tabela, string nume_coloana, string nume_nou)
+	{
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (strcmp(tabela->GetNume_tabela(), nume_tabela.c_str()) == 0)
+			{
+				tabela[i].Schimbare_nume_coloana(nume_coloana, nume_nou);
+			}
+		}
+	}
+	
 	friend ostream& operator<<(ostream& out, Database);
 	friend istream& operator>>(istream& in, Database&);
 };
@@ -1366,7 +1401,7 @@ public:
 					int capat2 = text_utilizator.find(" ((")-1;
 					x = text_utilizator.substr(capat1, capat2);
 					int nr_col = 0;
-					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), "(") - 1;
+					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), '(') - 1;
 					char** nume_coloane = new char* [nr_col];
 					for (int i = 0; i < nr_col; i++)
 					{
@@ -1525,7 +1560,21 @@ public:
 					}
 					if (i == 6)
 					{
-
+					text_utilizator.erase(gasit, text_comenzi[i].length());
+					string x;
+					int capat1 = text_utilizator.find(" ") + 1;
+					int capat2 = text_utilizator.find(" S") - 1;
+					x = text_utilizator.substr(capat1, capat2);
+					text_utilizator.erase(0, x.length());
+					text_utilizator.erase(0, strlen(" SET nume_coloana =") + 1);
+					int pos = text_utilizator.find(" W") - 1;
+					string nume_nou = text_utilizator.substr(0, pos);
+					text_utilizator.erase(0, nume_nou.length());
+					text_utilizator.erase(0, strlen(" WHERE nume_coloana = ") + 1);
+					string nume_coloana = text_utilizator.substr(0);
+					data.Update_coloana_din_tabela(x, nume_coloana, nume_nou);
+					cout << "Numele coloanei a fost schimbat in " << nume_nou;
+					getline(cin, text_utilizator);
 					}
 				}
 			}	
