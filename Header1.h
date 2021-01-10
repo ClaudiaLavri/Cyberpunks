@@ -602,7 +602,8 @@ private:
 	Inregistrare* inreg;
 
 public:
-	Tabela()																	//constructor implicit
+	//constructor implicit
+	Tabela()
 	{
 		nume_tabela = new char[strlen("Tabel") + 1];
 		strcpy_s(nume_tabela, strlen("Tabel") + 1, "Tabel");
@@ -611,8 +612,9 @@ public:
 		nr_inregistrari = 0;
 		inreg = nullptr;
 	}
-
-	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana, int nr_inregistrari, Inregistrare* inreg)					//consrtuctor cu parametrii
+	
+	//constructor cu parametrii
+	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana, int nr_inregistrari, Inregistrare* inreg)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -648,7 +650,8 @@ public:
 		}
 	}
 
-	~Tabela()																	//destructor
+	//destructor
+	~Tabela()
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -666,7 +669,8 @@ public:
 		}
 	}
 
-	Tabela(const Tabela& t)														//constructor de copiere
+	//constructor de copiere
+	Tabela(const Tabela& t)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -709,7 +713,8 @@ public:
 		}
 	}
 
-	Tabela& operator=(const Tabela& t)											//supraincarcare operator =
+	//supraincarcare operator =
+	Tabela& operator=(const Tabela& t)
 	{
 		if (this->nume_tabela != nullptr)
 		{
@@ -742,7 +747,8 @@ public:
 		return *this;
 	}
 
-	void SetNume_tabela(char* nume_tabela)										//setter nume tabela
+	//setter nume_tabela
+	void SetNume_tabela(char* nume_tabela)
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -754,8 +760,8 @@ public:
 			this->nume_tabela = nullptr;
 		}
 	}
-
-	char* GetNume_tabela()														//getter nume tabela
+	//getter nume_tabela
+	char* GetNume_tabela()
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -767,7 +773,8 @@ public:
 		}
 	}
 
-	void SetNr_coloane(int nr_coloane)											//setter numar coloane
+	//setter nr_coloane
+	void SetNr_coloane(int nr_coloane)
 	{
 		if (nr_coloane > 0)
 		{
@@ -775,7 +782,8 @@ public:
 		}
 	}
 
-	int GetNr_coloane()															//getter numar coloane
+	//getter nr_coloane
+	int GetNr_coloane()
 	{
 		if (this->nr_coloane > 0)
 		{
@@ -787,7 +795,8 @@ public:
 		}
 	}
 
-	void SetColoana(Coloana* col, int nr_coloane)								//setter coloane
+	//setter nr_coloane
+	void SetColoana(Coloana* col, int nr_coloane)
 	{
 		if (nr_coloane > 0 && col != nullptr)
 		{
@@ -803,7 +812,8 @@ public:
 		}
 	}
 
-	Coloana* GetColoana()														//getter coloane
+	//getter coloane
+	Coloana* GetColoana()
 	{
 		if (this->col != nullptr)
 		{
@@ -813,22 +823,9 @@ public:
 		{
 			return 0;
 		}
-
-		/*if (this->col != nullptr)
-		{
-			Coloana* copie = new Coloana[nr_coloane];
-			for (int i = 0; i < nr_coloane; i++)
-			{
-				copie[i] = col[i];
-			}
-			return col;
-		}
-		else
-		{
-			return nullptr;
-		}*/
 	}
 
+	//setter inreg
 	void SetInregistrare(Inregistrare* inreg, int nr_inregistrari)
 	{
 		if (nr_inregistrari > 0 && inreg != nullptr)
@@ -845,6 +842,7 @@ public:
 		}
 	}
 
+	//getter inreg
 	Inregistrare* GetInregistrare()
 	{
 		if (this->inreg != nullptr)
@@ -857,30 +855,35 @@ public:
 		}
 	}
 
+	//supraincarcarea operatorului !
 	bool operator!()
 	{
 		return nume_tabela != 0;
 	}
 
+	//supraincarcarea operatorului ++
 	Tabela operator++()
 	{
 		nr_coloane++;
 		return *this;
 	}
 
+	//supraincarcarea operatorului ++(int i)
 	Tabela operator++(int i)
 	{
 		Tabela copie = *this;
 		this->nr_coloane++;
 		return copie;
 	}
-
+	
+ 	//supraincarcarea operatorului --
 	Tabela operator--()
 	{
 		nr_coloane--;
 		return *this;
 	}
 
+	//supraincarcarea operatorului --(int i)
 	Tabela operator--(int i)
 	{
 		Tabela copie = *this;
@@ -888,6 +891,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcarea operatorului +
 	Tabela operator+(int valoare)
 	{
 		Tabela copie = *this;
@@ -895,6 +899,7 @@ public:
 		return copie;
 	}
 
+	//supraincarcarea operatorului -
 	Tabela operator-(Tabela t)
 	{
 		Tabela copie = *this;
@@ -909,6 +914,7 @@ public:
 		}
 	}
 
+	//supraincarcarea operatorului []
 	int operator[](int index)
 	{
 		if (index >= 0 && index < strlen(nume_tabela))
@@ -921,21 +927,25 @@ public:
 		}
 	}
 
+	//supraincarcarea operatorului ()
 	operator int()
 	{
 		return nr_coloane;
 	}
 
+	//supraincarcarea operatorului >
 	bool operator >(Tabela t)
 	{
 		return this->nr_coloane < t.nr_coloane;
 	}
 
+	//supraincarcarea operatorului ==
 	bool operator==(Tabela& t)
 	{
 		return  this->nr_coloane = t.nr_coloane;
 	}
 
+	//functie pentru introducere noii coloane in tabela
 	void New_coloana(string x, string tip, int dimensiune, string val_implicita, int i)
 	{
 		if (nr_coloane == 0)
@@ -950,19 +960,6 @@ public:
 		}
 		else
 		{
-			//Coloana* copie = new Coloana[nr_coloane];
-			//for (int i = 0; i < this->nr_coloane; i++)
-			//{
-			//	copie[i] = col[i];
-			//}
-			//delete[] col;
-			//nr_coloane++;
-			//col = new Coloana[nr_coloane];
-			//for (int i = 0; i < this->nr_coloane - 1; i++)
-			//{
-			//	col[i] = copie[i];
-			//}
-			//delete[] copie;
 			col[i].setNumeColoana((char*)x.c_str());
 			col[i].setDimensiune(dimensiune);
 			col[i].setTip((char*)tip.c_str());
@@ -970,11 +967,13 @@ public:
 		}
 	}
 
+	//functie pentru alocare memorie pentru coloane
 	void Alocare_col(int nr_col)
 	{
 		col = new Coloana[nr_col];
 	}
 
+	//functie pentru introducere inregistrari
 	void New_inregistrare(string* x)
 	{
 		if (nr_inregistrari == 0)
@@ -1010,6 +1009,8 @@ public:
 			}
 		}
 	}
+	
+	//functie pentru stergerea unei coloane
 	void Delete_col(string nume_tabela, string nume_coloana)
 	{
 		bool egal = false;
@@ -1213,6 +1214,7 @@ public:
 		{
 			Tabela auxi;
 			Tabela* copie = new Tabela[nr_tabele];
+			int cont = 0;
 			for (int i = 0; i < nr_tabele; i++)
 			{
 				if (x == tabela[i].GetNume_tabela())
@@ -1222,9 +1224,10 @@ public:
 			}
 			for (int i = 0; i < nr_tabele; i++)
 			{
-				if (tabela[i] == auxi)
+				if (strcmp(tabela[i].GetNume_tabela(), auxi.GetNume_tabela()) != 0)
 				{
-					copie[i] = tabela[i];
+					copie[cont] = tabela[i];
+					cont++;
 				}
 			}
 			delete[] tabela;
@@ -1241,7 +1244,6 @@ public:
 			cout << "Nu exista nicio tabela";
 		}
 	}
-
 	//functie pentru afisarea unei coloane
 	void Display_table(string x)
 	{
