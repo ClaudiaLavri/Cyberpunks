@@ -484,7 +484,7 @@ public:
 			this->nume_tabela = nullptr;
 		}
 
-		if (nr_coloane > 0)
+		if (t.nr_coloane > 0)
 		{
 			this->nr_coloane = t.nr_coloane;
 			this->col = new Coloana[nr_coloane];
@@ -682,24 +682,17 @@ public:
 		}
 		else
 		{
-			//Coloana* copie = new Coloana[nr_coloane];
-			//for (int i = 0; i < this->nr_coloane; i++)
-			//{
-			//	copie[i] = col[i];
-			//}
-			//delete[] col;
-			//nr_coloane++;
 			col = new Coloana[nr_coloane];
-			//for (int i = 0; i < this->nr_coloane - 1; i++)
-			//{
-			//	col[i] = copie[i];
-			//}
-			//delete[] copie;
 			col->setNumeColoana((char*)x.c_str());
 			col->setDimensiune(dimensiune);
 			col->setTip((char*)tip.c_str());
 			col->setValImplicita((char*)val_implicita.c_str());
 		}
+	}
+	
+	void Alocare_col(int nr_col)
+	{
+		col = new Coloana[nr_col];
 	}
 	
 	friend class Coloana;
@@ -1043,10 +1036,10 @@ public:
 			tabela = new Tabela[nr_tabele];
 			tabela->SetNume_tabela((char*)x.c_str());
 			tabela->SetNr_coloane(nr_col);
-			//tabela->New_coloana;
+			tabela->Alocare_col(nr_col);
 			for (int i = 0; i < nr_col; i++)
 			{
-				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i]);
+				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
 			}
 		}
 		else
@@ -1073,7 +1066,12 @@ public:
 			}
 			delete[] copie;
 			tabela->SetNume_tabela((char*)x.c_str());
-			tabela->SetNr_coloane(1);
+			tabela->SetNr_coloane(nr_col);
+			tabela->Alocare_col(nr_col);
+			for (int i = 0; i < nr_col; i++)
+			{
+				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
+			}
 		}
 	}
 	//functie pentru stergerea unei coloane
@@ -1120,6 +1118,7 @@ public:
 			if (x == tabela[i].GetNume_tabela())
 			{
 				cout << tabela[i];
+				cout<<endl;
 			}
 		}
 	}
@@ -1264,7 +1263,8 @@ public:
 						}
 						text_utilizator.erase(0, strlen("), ("));
 					}
-					data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite);
+					data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
+					cout << "A fost creata tabela " << x << endl;
 					getline(cin, text_utilizator);
 					}
 					if (i == 1)
@@ -1283,6 +1283,7 @@ public:
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Drop_table(x);
+						cout << "A fost stearsa tabela " << x << endl;
 						getline(cin, text_utilizator);
 					}
 					if (i == 3)
