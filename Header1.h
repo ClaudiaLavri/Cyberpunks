@@ -668,7 +668,7 @@ public:
 	}
 	
 	//functie pentru generarea unei noi coloane
-	void New_coloana(string x, string tip, int dimensiune, string val_implicita)
+	void New_coloana(string x, string tip, int dimensiune, string val_implicita, int i)
 	{
 		if (nr_coloane == 0)
 		{
