@@ -594,23 +594,25 @@ istream& operator>>(istream& in, Inregistrare& x)
 
 class Tabela
 {
-
 private:
 	char* nume_tabela;
 	int nr_coloane;
 	Coloana* col;
+	int nr_inregistrari;
+	Inregistrare* inreg;
+
 public:
-	//constructor implicit
-	Tabela()
+	Tabela()																	//constructor implicit
 	{
 		nume_tabela = new char[strlen("Tabel") + 1];
 		strcpy_s(nume_tabela, strlen("Tabel") + 1, "Tabel");
 		nr_coloane = 0;
 		col = nullptr;
+		nr_inregistrari = 0;
+		inreg = nullptr;
 	}
 
-	//constructor cu parametrii
-	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana)
+	Tabela(char* nume_tabela, int nr_coloane, Coloana* coloana, int nr_inregistrari, Inregistrare* inreg)					//consrtuctor cu parametrii
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -628,12 +630,25 @@ public:
 		}
 		else
 		{
-			col = nullptr;
+			this->col = nullptr;
+		}
+
+		this->nr_inregistrari = nr_inregistrari;
+		if (nr_inregistrari > 0)
+		{
+			this->inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				this->inreg[i] = inreg[i];
+			}
+		}
+		else
+		{
+			this->inreg = nullptr;
 		}
 	}
 
-	//destructor
-	~Tabela()
+	~Tabela()																	//destructor
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -644,12 +659,16 @@ public:
 		{
 			delete[] col;
 		}
+
+		if (inreg != nullptr)
+		{
+			delete[] inreg;
+		}
 	}
 
-	//constructor de copiere
-	Tabela(const Tabela& t)
+	Tabela(const Tabela& t)														//constructor de copiere
 	{
-		if (t.nume_tabela != nullptr)
+		if (nume_tabela != nullptr)
 		{
 			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
 			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
@@ -673,21 +692,35 @@ public:
 			col = nullptr;
 			nr_coloane = 0;
 		}
+
+		if (nr_inregistrari > 0)
+		{
+			this->nr_inregistrari = t.nr_inregistrari;
+			this->inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < t.nr_inregistrari; i++)
+			{
+				this->inreg[i] = t.inreg[i];
+			}
+		}
+		else
+		{
+			inreg = nullptr;
+			nr_inregistrari = 0;
+		}
 	}
 
-	//supraincarcare operator =
-	Tabela& operator=(const Tabela& t)
+	Tabela& operator=(const Tabela& t)											//supraincarcare operator =
 	{
-		if (nume_tabela != nullptr)
+		if (this->nume_tabela != nullptr)
 		{
-			delete[] nume_tabela;
+			delete[] this->nume_tabela;
 		}
 
 		if (col != nullptr)
 		{
-			delete[] col;
+			delete[] this->col;
 		}
-		if (nume_tabela != nullptr)
+		if (t.nume_tabela != nullptr)
 		{
 			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
 			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
@@ -709,8 +742,7 @@ public:
 		return *this;
 	}
 
-	//setter nume_tabela
-	void SetNume_tabela(char* nume_tabela)
+	void SetNume_tabela(char* nume_tabela)										//setter nume tabela
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -723,8 +755,7 @@ public:
 		}
 	}
 
-	//getter nume_tabela
-	char* GetNume_tabela()
+	char* GetNume_tabela()														//getter nume tabela
 	{
 		if (nume_tabela != nullptr)
 		{
@@ -736,8 +767,7 @@ public:
 		}
 	}
 
-	//setter nr_coloane
-	void SetNr_coloane(int nr_coloane)
+	void SetNr_coloane(int nr_coloane)											//setter numar coloane
 	{
 		if (nr_coloane > 0)
 		{
@@ -745,8 +775,7 @@ public:
 		}
 	}
 
-	//getter nr_coloane
-	int GetNr_coloane()
+	int GetNr_coloane()															//getter numar coloane
 	{
 		if (this->nr_coloane > 0)
 		{
@@ -758,8 +787,7 @@ public:
 		}
 	}
 
-	//setter coloane
-	void SetColoana(Coloana* col, int nr_coloane)
+	void SetColoana(Coloana* col, int nr_coloane)								//setter coloane
 	{
 		if (nr_coloane > 0 && col != nullptr)
 		{
@@ -775,8 +803,7 @@ public:
 		}
 	}
 
-	//getter coloane
-	Coloana* GetColoana()
+	Coloana* GetColoana()														//getter coloane
 	{
 		if (this->col != nullptr)
 		{
@@ -786,24 +813,61 @@ public:
 		{
 			return 0;
 		}
-	}
-	
-	//Supraincarcare operatori
 
-	//supraincarcare operator !
+		/*if (this->col != nullptr)
+		{
+			Coloana* copie = new Coloana[nr_coloane];
+			for (int i = 0; i < nr_coloane; i++)
+			{
+				copie[i] = col[i];
+			}
+			return col;
+		}
+		else
+		{
+			return nullptr;
+		}*/
+	}
+
+	void SetInregistrare(Inregistrare* inreg, int nr_inregistrari)
+	{
+		if (nr_inregistrari > 0 && inreg != nullptr)
+		{
+			this->inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				this->inreg[i] = inreg[i];
+			}
+		}
+		else
+		{
+			this->inreg = nullptr;
+		}
+	}
+
+	Inregistrare* GetInregistrare()
+	{
+		if (this->inreg != nullptr)
+		{
+			return inreg;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
 	bool operator!()
 	{
 		return nume_tabela != 0;
 	}
 
-	//supraincarcare operator ++
 	Tabela operator++()
 	{
 		nr_coloane++;
 		return *this;
 	}
 
-	//supraincarcare operator ++(int i)
 	Tabela operator++(int i)
 	{
 		Tabela copie = *this;
@@ -811,14 +875,12 @@ public:
 		return copie;
 	}
 
-	//supraincarcare operator --
 	Tabela operator--()
 	{
 		nr_coloane--;
 		return *this;
 	}
 
-	//supraincarcare operator --(int i)
 	Tabela operator--(int i)
 	{
 		Tabela copie = *this;
@@ -826,15 +888,13 @@ public:
 		return copie;
 	}
 
-	//supraincarcare operator +
-	Tabela operator+(int x)
+	Tabela operator+(int valoare)
 	{
 		Tabela copie = *this;
-		copie.nr_coloane = x + nr_coloane;
+		copie.nr_coloane += valoare;
 		return copie;
 	}
 
-	//supraincarcare operator -
 	Tabela operator-(Tabela t)
 	{
 		Tabela copie = *this;
@@ -845,11 +905,10 @@ public:
 		}
 		else
 		{
-			cout << "Numarul de coloane va fi negativ"<<endl;
+			cout << "Numarul de coloane va fi negativ" << endl;
 		}
 	}
 
-	//supraincarcare operator []
 	int operator[](int index)
 	{
 		if (index >= 0 && index < strlen(nume_tabela))
@@ -862,25 +921,21 @@ public:
 		}
 	}
 
-	//supraincarcare operator ()
 	operator int()
 	{
 		return nr_coloane;
 	}
 
-	//supraincarcare operator >
 	bool operator >(Tabela t)
 	{
-		return this->nr_coloane > t.nr_coloane;
+		return this->nr_coloane < t.nr_coloane;
 	}
 
-	//supraincarcare operator ==
 	bool operator==(Tabela& t)
 	{
-		return  this->nr_coloane=t.nr_coloane ;
+		return  this->nr_coloane = t.nr_coloane;
 	}
-	
-	//functie pentru generarea unei noi coloane
+
 	void New_coloana(string x, string tip, int dimensiune, string val_implicita, int i)
 	{
 		if (nr_coloane == 0)
@@ -895,21 +950,31 @@ public:
 		}
 		else
 		{
-			col = new Coloana[nr_coloane];
-			col->setNumeColoana((char*)x.c_str());
-			col->setDimensiune(dimensiune);
-			col->setTip((char*)tip.c_str());
-			col->setValImplicita((char*)val_implicita.c_str());
+			//Coloana* copie = new Coloana[nr_coloane];
+			//for (int i = 0; i < this->nr_coloane; i++)
+			//{
+			//	copie[i] = col[i];
+			//}
+			//delete[] col;
+			//nr_coloane++;
+			//col = new Coloana[nr_coloane];
+			//for (int i = 0; i < this->nr_coloane - 1; i++)
+			//{
+			//	col[i] = copie[i];
+			//}
+			//delete[] copie;
+			col[i].setNumeColoana((char*)x.c_str());
+			col[i].setDimensiune(dimensiune);
+			col[i].setTip((char*)tip.c_str());
+			col[i].setValImplicita((char*)val_implicita.c_str());
 		}
 	}
-	
-	//functie pentru alocare spatiu pentru coloana
+
 	void Alocare_col(int nr_col)
 	{
 		col = new Coloana[nr_col];
 	}
-	
-	//introducere inregistrari in tabela
+
 	void New_inregistrare(string* x)
 	{
 		if (nr_inregistrari == 0)
@@ -945,10 +1010,16 @@ public:
 			}
 		}
 	}
-	
+
+	void Afisare_inregistrare(string nume)
+	{
+
+	}
+
 	friend class Coloana;
 	friend ostream& operator<<(ostream& out, Tabela);
 	friend istream& operator>>(istream& in, Tabela&);
+
 };
 
 //supraincarcare operator << pentru clasa Tabela
@@ -1261,9 +1332,21 @@ public:
 					int nr_col = 0;
 					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), "(") - 1;
 					char** nume_coloane = new char* [nr_col];
+					for (int i = 0; i < nr_col; i++)
+					{
+						nume_coloane[i] = new char[nr_col];
+					}
 					char** tip_coloane = new char* [nr_col];
+					for (int i = 0; i < nr_col; i++)
+					{
+						tip_coloane[i] = new char[nr_col];
+					}
 					int* dimensiune_coloane = new int[nr_col];
 					char** valori_implicite = new char* [nr_col];
+					for (int i = 0; i < nr_col; i++)
+					{
+						valori_implicite[i] = new char[nr_col];
+					}
 					text_utilizator.erase(0, x.length());
 					text_utilizator.erase(0, strlen(" ((")+1);
 					for (int j = 0; j < nr_col; j++)
