@@ -1276,7 +1276,7 @@ public:
 	{
 		for (int i = 0; i < nr_tabele; i++)
 		{
-			if (strcmp(tabela->GetNume_tabela, nume_tabela.c_str()) == 0)
+			if (strcmp(tabela->GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
 				tabela->Delete_col(nume_tabela, nume_coloana);
 			}
