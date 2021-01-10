@@ -558,7 +558,7 @@ public:
 		}
 		else
 		{
-			col = nullptr;
+			this->col = nullptr;
 		}
 	}
 
