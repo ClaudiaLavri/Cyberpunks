@@ -1323,7 +1323,7 @@ public:
 						}
 						string valoare = text_utilizator.substr(0, pos);
 						valori[j] = valoare;
-						text_utilizator.erase(0, valoare.length);
+						text_utilizator.erase(0, valoare.length());
 						if (j == nr_valori - 1)
 						{
 							break;
