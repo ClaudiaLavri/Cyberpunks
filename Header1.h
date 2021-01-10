@@ -379,6 +379,219 @@ istream& operator>>(istream& in, Coloana& c)
 	return in;
 }
 
+class Inregistrare
+{
+private:
+	static int id;
+	//int nr_verificare = 0;
+	string* valoare;
+	int capacitate;
+public:
+	//constructor implicit
+	Inregistrare()
+	{
+		this->valoare = nullptr;
+		this->capacitate = 0;
+	}
+
+	//constructor cu parametrii
+	Inregistrare(string* valoare, int capacitate)
+	{
+		if (capacitate > 0)
+		{
+			this->capacitate = capacitate;
+			this->valoare = new string[capacitate];
+			for (int i = 0; i < capacitate; i++)
+			{
+				this->valoare[i] = valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+	}
+
+	//constructor de copiere
+	Inregistrare(const Inregistrare& x)
+	{
+		if (x.capacitate > 0)
+		{
+			this->capacitate = x.capacitate;
+			this->valoare = new string[x.capacitate];
+			for (int i = 0; i < x.capacitate; i++)
+			{
+				this->valoare[i] = x.valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+	}
+
+	////supraincarcare operator =
+	Inregistrare& operator=(Inregistrare& x)
+	{
+		if (this->valoare != nullptr)
+		{
+			delete[] this->valoare;
+		}
+
+		if (x.capacitate > 0)
+		{
+			this->capacitate = x.capacitate;
+			this->valoare = new string[x.capacitate];
+			for (int i = 0; i < x.capacitate; i++)
+			{
+				this->valoare[i] = x.valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+			this->capacitate = 0;
+		}
+
+		return *this;
+	}
+
+	//destructor
+	~Inregistrare()
+	{
+		if (this->valoare != nullptr)
+		{
+			delete[] this->valoare;
+		}
+	}
+
+	//getter valoare
+	string* getValoare()
+	{
+		return this->valoare;
+	}
+
+	//getter capacitate
+	int getCapacitate()
+	{
+		return this->capacitate;
+	}
+
+	//setter valoare
+	void setValoare(string* valoare)
+	{
+		if (valoare != nullptr)
+		{
+			for (int i = 0; i < this->capacitate; i++)
+			{
+				this->valoare[i] = valoare[i];
+			}
+		}
+		else
+		{
+			this->valoare = nullptr;
+		}
+	}
+
+	//setter capacitate
+	void setCapacitate(int capacitate)
+	{
+		if (capacitate > 0)
+		{
+			this->capacitate = capacitate;
+		}
+		else
+		{
+			this->capacitate = 0;
+		}
+	}
+
+	//Supraincarcare operatori
+
+	bool operator!()
+	{
+		return valoare != nullptr;
+	}
+
+	Inregistrare operator++()
+	{
+		capacitate++;
+		return *this;
+	}
+
+	Inregistrare operator++(int i)
+	{
+		Inregistrare copie = *this;
+		capacitate++;
+		return copie;
+	}
+
+	Inregistrare operator--()
+	{
+		capacitate--;
+		return *this;
+	}
+
+	Inregistrare operator--(int i)
+	{
+		Inregistrare copie = *this;
+		capacitate--;
+		return copie;
+	}
+
+	Inregistrare operator+(int x)
+	{
+		Inregistrare copie = *this;
+		copie.capacitate = x + capacitate;
+		return copie;
+	}
+
+	Inregistrare operator-(Inregistrare t)
+	{
+		Inregistrare copie = *this;
+		if (capacitate >= t.capacitate)
+		{
+			copie.capacitate = capacitate - t.capacitate;
+			return copie;
+		}
+		else
+		{
+			cout << "Capacitatea nu poate fi negativa" << endl;
+		}
+	}
+	
+	friend ostream& operator<<(ostream& out, Inregistrare);
+	friend istream& operator>>(istream& in, Inregistrare&);
+};
+
+//supraincarcare operator << pentru clasa Inregistrare
+ostream& operator<<(ostream& out, Inregistrare x)
+{
+	out << endl;
+	for (int i = 0; i < x.capacitate; i++)
+	{
+		out << x.valoare[i] << "\t";
+	}
+	out << endl;
+}
+
+//supraincarcare operator >> pentru clasa Inregistrare
+istream& operator>>(istream& in, Inregistrare& x)
+{
+	cout << "Capacitate: ";
+	in >> x.capacitate;
+	in >> ws;
+	cout << "Valori: ";
+	x.valoare = new string[x.capacitate];
+	for (int i = 0; i < x.capacitate; i++)
+	{
+		getline(in, x.valoare[i]);
+	}
+	return in;
+}
+
 class Tabela
 {
 
@@ -690,9 +903,47 @@ public:
 		}
 	}
 	
+	//functie pentru alocare spatiu pentru coloana
 	void Alocare_col(int nr_col)
 	{
 		col = new Coloana[nr_col];
+	}
+	
+	//introducere inregistrari in tabela
+	void New_inregistrare(string* x)
+	{
+		if (nr_inregistrari == 0)
+		{
+			nr_inregistrari++;
+			inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				//Inregistrare inreg(x, nr_coloane);
+				inreg[i].setCapacitate(nr_coloane);
+				inreg[i].setValoare(x);
+			}
+		}
+		else
+		{
+			Inregistrare* copie = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				copie[i] = inreg[i];
+			}
+			delete[] inreg;
+			nr_inregistrari++;
+			inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari - 1; i++)
+			{
+				inreg[i] = copie[i];
+			}
+			delete[] copie;
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				inreg[i].setCapacitate(nr_coloane);
+				inreg->setValoare(x);
+			}
+		}
 	}
 	
 	friend class Coloana;
@@ -741,219 +992,6 @@ istream& operator>>(istream& in, Tabela& t)
 		in >> t.col[i];
 	}
 	
-	return in;
-}
-
-class Inregistrare
-{
-private:
-	static int id;
-	//int nr_verificare = 0;
-	string* valoare;
-	int capacitate;
-public:
-	//constructor implicit
-	Inregistrare()
-	{
-		this->valoare = nullptr;
-		this->capacitate = 0;
-	}
-
-	//constructor cu parametrii
-	Inregistrare(string* valoare, int capacitate)
-	{
-		if (capacitate > 0)
-		{
-			this->capacitate = capacitate;
-			this->valoare = new string[capacitate];
-			for (int i = 0; i < capacitate; i++)
-			{
-				this->valoare[i] = valoare[i];
-			}
-		}
-		else
-		{
-			this->valoare = nullptr;
-			this->capacitate = 0;
-		}
-	}
-
-	//constructor de copiere
-	Inregistrare(const Inregistrare& x)
-	{
-		if (x.capacitate > 0)
-		{
-			this->capacitate = x.capacitate;
-			this->valoare = new string[x.capacitate];
-			for (int i = 0; i < x.capacitate; i++)
-			{
-				this->valoare[i] = x.valoare[i];
-			}
-		}
-		else
-		{
-			this->valoare = nullptr;
-			this->capacitate = 0;
-		}
-	}
-
-	////supraincarcare operator =
-	Inregistrare& operator=(Inregistrare& x)
-	{
-		if (this->valoare != nullptr)
-		{
-			delete[] this->valoare;
-		}
-
-		if (x.capacitate > 0)
-		{
-			this->capacitate = x.capacitate;
-			this->valoare = new string[x.capacitate];
-			for (int i = 0; i < x.capacitate; i++)
-			{
-				this->valoare[i] = x.valoare[i];
-			}
-		}
-		else
-		{
-			this->valoare = nullptr;
-			this->capacitate = 0;
-		}
-
-		return *this;
-	}
-
-	//destructor
-	~Inregistrare()
-	{
-		if (this->valoare != nullptr)
-		{
-			delete[] this->valoare;
-		}
-	}
-
-	//getter valoare
-	string* getValoare()
-	{
-		return this->valoare;
-	}
-
-	//getter capacitate
-	int getCapacitate()
-	{
-		return this->capacitate;
-	}
-
-	//setter valoare
-	void setValoare(string* valoare)
-	{
-		if (valoare != nullptr)
-		{
-			for (int i = 0; i < this->capacitate; i++)
-			{
-				this->valoare[i] = valoare[i];
-			}
-		}
-		else
-		{
-			this->valoare = nullptr;
-		}
-	}
-
-	//setter capacitate
-	void setCapacitate(int capacitate)
-	{
-		if (capacitate > 0)
-		{
-			this->capacitate = capacitate;
-		}
-		else
-		{
-			this->capacitate = 0;
-		}
-	}
-
-	//Supraincarcare operatori
-
-	bool operator!()
-	{
-		return valoare != nullptr;
-	}
-
-	Inregistrare operator++()
-	{
-		capacitate++;
-		return *this;
-	}
-
-	Inregistrare operator++(int i)
-	{
-		Inregistrare copie = *this;
-		capacitate++;
-		return copie;
-	}
-
-	Inregistrare operator--()
-	{
-		capacitate--;
-		return *this;
-	}
-
-	Inregistrare operator--(int i)
-	{
-		Inregistrare copie = *this;
-		capacitate--;
-		return copie;
-	}
-
-	Inregistrare operator+(int x)
-	{
-		Inregistrare copie = *this;
-		copie.capacitate = x + capacitate;
-		return copie;
-	}
-
-	Inregistrare operator-(Inregistrare t)
-	{
-		Inregistrare copie = *this;
-		if (capacitate >= t.capacitate)
-		{
-			copie.capacitate = capacitate - t.capacitate;
-			return copie;
-		}
-		else
-		{
-			cout << "Capacitatea nu poate fi negativa" << endl;
-		}
-	}
-	
-	friend ostream& operator<<(ostream& out, Inregistrare);
-	friend istream& operator>>(istream& in, Inregistrare&);
-};
-
-//supraincarcare operator << pentru clasa Inregistrare
-ostream& operator<<(ostream& out, Inregistrare x)
-{
-	out << endl;
-	for (int i = 0; i < x.capacitate; i++)
-	{
-		out << x.valoare[i] << "\t";
-	}
-	out << endl;
-}
-
-//supraincarcare operator >> pentru clasa Inregistrare
-istream& operator>>(istream& in, Inregistrare& x)
-{
-	cout << "Capacitate: ";
-	in >> x.capacitate;
-	in >> ws;
-	cout << "Valori: ";
-	x.valoare = new string[x.capacitate];
-	for (int i = 0; i < x.capacitate; i++)
-	{
-		getline(in, x.valoare[i]);
-	}
 	return in;
 }
 
@@ -1123,6 +1161,22 @@ public:
 		}
 	}
 	
+	//functie pentru inserarea unei inregistrari in tabela
+	void Insert_in_tabela(string nume_tabela, string* x)
+	{
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (tabela[i].GetNume_tabela() == nume_tabela)
+			{
+				tabela[i].New_inregistrare(x);
+			}
+			else
+			{
+				cout << "Nu exista tabela " << nume_tabela;
+				cout << endl;
+			}
+		}
+	}
 
 	friend ostream& operator<<(ostream& out, Database);
 	friend istream& operator>>(istream& in, Database&);
@@ -1294,42 +1348,43 @@ public:
 						int capat2 = text_utilizator.find(" V") - 1;
 						x = text_utilizator.substr(capat1, capat2);
 						text_utilizator.erase(0, x.length());
-						text_utilizator.erase(0, strlen(" VALUES(")+1);
+						text_utilizator.erase(0, strlen(" VALUES(") + 1);
 
 						int p = 0;
 						int nr_valori = 0;
 
 						while (text_utilizator[p] != ')')
 						{
-						if (text_utilizator[p] == ',')
-						{
-							nr_valori++;
-						}
-						p++;
+							if (text_utilizator[p] == ',')
+							{
+								nr_valori++;
+							}
+							p++;
 						}
 						nr_valori++;
 
-					string* valori = new string[nr_valori];
-					for (int j = 0; j < nr_valori; j++)
-					{
-						int pos;
-						if (j == nr_valori - 1)
+						string* valori = new string[nr_valori];
+						for (int j = 0; j < nr_valori; j++)
 						{
-							pos = text_utilizator.find(')');
+							int pos;
+							if (j == nr_valori - 1)
+							{
+								pos = text_utilizator.find(')');
+							}
+							else
+							{
+								pos = text_utilizator.find(',');
+							}
+							string valoare = text_utilizator.substr(0, pos);
+							valori[j] = valoare;
+							text_utilizator.erase(0, valoare.length());
+							if (j == nr_valori - 1)
+							{
+								break;
+							}
+							text_utilizator.erase(0, strlen(", "));
 						}
-						else
-						{
-							pos = text_utilizator.find(',');
-						}
-						string valoare = text_utilizator.substr(0, pos);
-						valori[j] = valoare;
-						text_utilizator.erase(0, valoare.length());
-						if (j == nr_valori - 1)
-						{
-							break;
-						}
-						text_utilizator.erase(0, strlen(", "));
-					}
+						data.Insert_in_tabela(x, valori);
 						getline(cin, text_utilizator);
 					}
 					if (i == 4)
