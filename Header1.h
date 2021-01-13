@@ -277,21 +277,21 @@ public:
 	//supraincarcare operator --(int i)
 	Coloana operator--(int i)
 	{
-		Coloane copie = *this;
+		Coloana copie = *this;
 		dimensiune--;
 		return copie;
 	}
 
 	//supraincarcare operator +
-	Coloana operator+(Coloane t)
+	Coloana operator+(Coloana t)
 	{
-		Coloane copie = *this;
+		Coloana copie = *this;
 		copie.dimensiune = dimensiune + t.dimensiune;
 		return copie;
 	}
 
 	//supraincarcare operator -
-	Coloana operator-(Coloane t)
+	Coloana operator-(Coloana t)
 	{
 		Coloana copie = *this;
 		if (dimensiune >= t.dimensiune)
@@ -333,7 +333,7 @@ public:
 	//supraincarcare operator ==
 	bool operator==(Coloana& t)
 	{
-		return  this->tip=t.tip ;
+		return  this->tip_coloana=t.tip_coloana ;
 	}
 
 	friend class Tabela;
@@ -575,6 +575,7 @@ ostream& operator<<(ostream& out, Inregistrare x)
 		out << x.valoare[i] << "\t";
 	}
 	out << endl;
+	retuen out;
 }
 
 //supraincarcare operator >> pentru clasa Inregistrare
@@ -1381,7 +1382,7 @@ public:
 	}
 
 	//functie pentru compararea valorii introduse de utilizator
-	void compara(string text_utilizator)
+	void compara()
 	{
 		int gasit = -1;
 		Database data;
