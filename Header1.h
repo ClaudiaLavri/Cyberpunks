@@ -575,7 +575,7 @@ ostream& operator<<(ostream& out, Inregistrare x)
 		out << x.valoare[i] << "\t";
 	}
 	out << endl;
-	retuen out;
+	return out;
 }
 
 //supraincarcare operator >> pentru clasa Inregistrare
