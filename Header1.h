@@ -1006,20 +1006,22 @@ public:
 			for (int i = 0; i < nr_inregistrari; i++)
 			{
 				inreg[i].setCapacitate(nr_coloane);
-				inreg->setValoare(x);
+				inreg[i].setValoare(x);
 			}
 		}
 	}
 	
 	//functie pentru stergerea unei coloane
-	void Delete_col(string nume_tabela, string nume_coloana)
+	void Delete_col(string nume_coloana)
 	{
 		bool egal = false;
+		Coloana auxi;
 		for (int i = 0; i < this->nr_coloane; i++)
 		{
 			if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
 			{
 				egal = true;
+				auxi = col[i];
 			}
 		}
 		if (egal == false)
@@ -1028,17 +1030,25 @@ public:
 		}
 		if (egal == true)
 		{
+			Coloana* copie = new Coloana[nr_coloane];
+			//Coloana aux;
+			int cont = 0;
 			for (int i = 0; i < this->nr_coloane; i++)
 			{
-				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
+				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) != 0)
 				{
-					for (int i = 0; i < this->nr_coloane - 1; i++)
-					{
-						col[i] = col[i + 1];
-					}
-					this->nr_coloane--;
+					copie[cont] = col[i];
+					cont++;
 				}
 			}
+			delete[] col;
+			nr_coloane--;
+			col = new Coloana[nr_coloane];
+			for (int i = 0; i < nr_coloane; i++)
+			{
+				col[i] = copie[i];
+			}
+			delete[] copie;
 		}
 	}
 	
@@ -1186,7 +1196,7 @@ public:
 	}
 	
 	//functie pentru generarea unei noi tabele
-	void New_table(string x, char** nume_coloane, char** tip_coloane, int* dimensiune_coloane, char** valori_implicite, int nr_col)									//creeaza o noua tabela
+	void New_table(string x, char** nume_coloane, char** tip_coloane, int* dimensiune_coloane, char** valori_implicite, int nr_col)
 	{
 		if (nr_tabele == 0)
 		{
@@ -1199,6 +1209,7 @@ public:
 			{
 				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
 			}
+			cout << "A fost creata tabela " << x << endl;
 		}
 		else
 		{
@@ -1223,13 +1234,14 @@ public:
 				tabela[i] = copie[i];
 			}
 			delete[] copie;
-			tabela->SetNume_tabela((char*)x.c_str());
-			tabela->SetNr_coloane(nr_col);
-			tabela->Alocare_col(nr_col);
+			tabela[nr_tabele-1].SetNume_tabela((char*)x.c_str());
+			tabela[nr_tabele-1].SetNr_coloane(nr_col);
+			tabela[nr_tabele-1].Alocare_col(nr_col);
 			for (int i = 0; i < nr_col; i++)
 			{
-				tabela->New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
+				tabela[nr_tabele-1].New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
 			}
+			cout << "A fost creata tabela " << x << endl;
 		}
 	}
 	//functie pentru stergerea unei coloane
@@ -1263,10 +1275,19 @@ public:
 				tabela[i] = copie[i];
 			}
 			delete[] copie;
+			if (strcmp(auxi.GetNume_tabela(), "Tabel") != 0)
+
+			{
+				cout << "A fost stearsa tabela " << x << endl;
+			}
+			else
+			{
+				cout << "Nu exista tabela cu numele " << x << endl;
+			}
 		}
 		else
 		{
-			cout << "Nu exista nicio tabela";
+			cout << "Nu exista nicio tabela"<<endl;
 		}
 	}
 	//functie pentru afisarea unei coloane
@@ -1279,6 +1300,24 @@ public:
 				cout << tabela[i];
 				cout<<endl;
 			}
+		}
+	}
+	//functie pentru afisarea tabelei cu numele x
+	void Display_table(string x)
+	{
+		bool verificare = false;
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (x == tabela[i].GetNume_tabela())
+			{
+				verificare = true;
+				cout << tabela[i];
+				cout << endl;
+			}
+		}
+		if (verificare == false)
+		{
+			cout << "Nu exista tabela " << x << endl;
 		}
 	}
 	
@@ -1298,14 +1337,15 @@ public:
 			}
 		}
 	}
-
+	//functie pentru stergerea coloanei nume_coloana din tabela nume_tabela
 	void Delete_from_table(string nume_tabela, string nume_coloana)
 	{
 		for (int i = 0; i < nr_tabele; i++)
 		{
-			if (strcmp(tabela->GetNume_tabela(), nume_tabela.c_str()) == 0)
+			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
-				tabela->Delete_col(nume_tabela, nume_coloana);
+				tabela[i].Delete_col(nume_coloana);
+				cout << "A fost stearsa coloana " << nume_coloana << endl;
 			}
 		}
 	}
