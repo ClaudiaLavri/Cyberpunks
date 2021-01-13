@@ -1597,7 +1597,55 @@ public:
 					}
 					if (i == 5)
 					{
-
+						text_utilizator.erase(gasit, text_comenzi[i].length()+1);
+						string continuare;
+						int k = 1;
+						continuare= text_utilizator.substr(0, 1);
+						if (continuare == "A")
+						{
+							k = 2;
+						}
+						if (k == 1)
+						{
+							text_utilizator.erase(0, strlen("("));
+							int p = 0;
+							int nr_coloane = 0;
+							while (text_utilizator[p] != ')')
+							{
+								if (text_utilizator[p] == ',')
+								{
+									nr_coloane++;
+								}
+								p++;
+							}
+							string* nume_coloane = new string[nr_coloane];
+							for (int j = 0; j < nr_coloane; j++)
+							{
+								int pos = text_utilizator.find(',');
+								string nume = text_utilizator.substr(0, pos);
+								nume_coloane[j] = nume;
+								text_utilizator.erase(0, nume.length());
+								if (text_utilizator.substr(0,3) == ") F")
+								{
+									break;
+								}
+								text_utilizator.erase(0, strlen(", "));
+							}
+						}
+						if (k == 2)
+						{
+							text_utilizator.erase(0, strlen(" ALL FROM "));
+						}
+						string nume_tabela=text_utilizator.substr(0);
+						if (k == 1)
+						{
+							//apelare select cu coloane
+						}
+						if (k == 2)
+						{
+							//apelare select cu all
+						}
+						getline(cin, text_utilizator);
 					}
 					if (i == 6)
 					{
