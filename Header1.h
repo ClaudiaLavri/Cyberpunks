@@ -1105,24 +1105,51 @@ public:
 		}
 	}
 	
-	void Schimbare_nume_coloana(string nume_coloana, string nume_nou)
+	void Update_coloana(string nume_coloana1, string val_noua, string nume_coloana2, string val, int& nr_modificari)
 	{
-		bool ok = true;
+		bool ok = false;
+		nr_modificari = 0;
 		for (int i = 0; i < nr_coloane; i++)
 		{
-			if (strcmp(this->col[i].getNumeColoana(), nume_nou.c_str()) == 0)
+			if (strcmp(this->col[i].getNumeColoana(), nume_coloana1.c_str()) == 0)
 			{
-				cout << "Exista deja o coloana cu numele " << nume_nou << endl;
-				ok = false;
+				ok = true;
 			}
+		}
+		if (ok == false)
+		{
+			cout << "Nu exista coloana " << nume_coloana1;
 		}
 		if (ok == true)
 		{
+			int numar_coloana1;
+			int numar_coloana2;
 			for (int i = 0; i < nr_coloane; i++)
 			{
-				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
+				if (strcmp(this->col[i].getNumeColoana(), nume_coloana1.c_str()) == 0)
 				{
-					this->col[i].setNumeColoana((char*)nume_nou.c_str());
+					numar_coloana1 = i;
+				}
+				if (strcmp(this->col[i].getNumeColoana(), nume_coloana2.c_str()) == 0)
+				{
+					numar_coloana2 = i;
+				}
+			}
+
+			for (int i = 0; i < inreg[i].getCapacitate(); i++)
+			{
+				bool ok = false;
+				for (int j = 0; j < nr_inregistrari; j++)
+				{
+					if (inreg[j].valoare[numar_coloana2] == val)
+					{
+						inreg[j].valoare[numar_coloana1] = val_noua;
+						ok = true;
+					}
+				}
+				if (ok == true)
+				{
+					nr_modificari++;
 				}
 			}
 		}
@@ -1427,13 +1454,14 @@ public:
 		}
 	}
 	
-	void Update_coloana_din_tabela(string nume_tabela, string nume_coloana, string nume_nou)
+	void Update_coloana_din_tabela(string nume_tabela, string nume_coloana1, string val,string nume_coloana2, string val_noua, int nr_modificari)
 	{
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (strcmp(tabela->GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
-				tabela[i].Schimbare_nume_coloana(nume_coloana, nume_nou);
+				tabela[i].Update_coloana(nume_coloana1, val, nume_coloana2, val_noua, nr_modificari);
+				cout << "Au fost modificate " << nr_modificari << " inregistrari in coloana " << nume_coloana2;
 			}
 		}
 	}
@@ -1741,21 +1769,30 @@ public:
 					}
 					if (i == 6)
 					{
-					text_utilizator.erase(gasit, text_comenzi[i].length());
-					string x;
-					int capat1 = text_utilizator.find(" ") + 1;
-					int capat2 = text_utilizator.find(" S") - 1;
-					x = text_utilizator.substr(capat1, capat2);
-					text_utilizator.erase(0, x.length());
-					text_utilizator.erase(0, strlen(" SET nume_coloana =") + 1);
-					int pos = text_utilizator.find(" W") - 1;
-					string nume_nou = text_utilizator.substr(0, pos);
-					text_utilizator.erase(0, nume_nou.length());
-					text_utilizator.erase(0, strlen(" WHERE nume_coloana = ") + 1);
-					string nume_coloana = text_utilizator.substr(0);
-					data.Update_coloana_din_tabela(x, nume_coloana, nume_nou);
-					cout << "Numele coloanei a fost schimbat in " << nume_nou;
-					getline(cin, text_utilizator);
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						int capat2 = text_utilizator.find(" S") - 1;
+						x = text_utilizator.substr(capat1, capat2);
+						text_utilizator.erase(0, x.length());
+						text_utilizator.erase(0, strlen(" SET ") + 1);
+						int pos = text_utilizator.find(" =");
+						string nume_coloana1= text_utilizator.substr(0, pos);
+						text_utilizator.erase(0, nume_coloana1.length());
+						text_utilizator.erase(0, strlen(" = "));
+						pos = text_utilizator.find(" W");
+						string val_noua = text_utilizator.substr(0, pos);
+						text_utilizator.erase(0, val_noua.length());
+						text_utilizator.erase(0, strlen(" WHERE "));
+						pos = text_utilizator.find(" =");
+						string nume_coloana2 = text_utilizator.substr(0, pos);
+						text_utilizator.erase(0, nume_coloana2.length());
+						text_utilizator.erase(0, strlen(" = "));
+						string val= text_utilizator.substr(0);
+						int nr_modificari = 0;
+						data.Update_coloana_din_tabela(x, nume_coloana1, val_noua, nume_coloana2, val, nr_modificari);
+						cout << endl;
+						getline(cin, text_utilizator);
 					}
 				}
 			}	
