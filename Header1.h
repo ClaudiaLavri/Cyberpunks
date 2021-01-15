@@ -1006,11 +1006,8 @@ public:
 				inreg[i] = copie[i];
 			}
 			delete[] copie;
-			for (int i = 0; i < nr_inregistrari; i++)
-			{
-				inreg[i].setCapacitate(nr_coloane);
-				inreg[i].setValoare(x);
-			}
+			inreg[nr_inregistrari - 1].setCapacitate(nr_coloane);
+			inreg[nr_inregistrari - 1].setValoare(x);
 		}
 	}
 	
