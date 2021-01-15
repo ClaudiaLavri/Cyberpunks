@@ -187,6 +187,7 @@ public:
 	//setter nume_coloana
 	void setNumeColoana(char* nume_coloana)
 	{
+		this->nume_coloana = new char[strlen(nume_coloana) + 1];
 		if (nume_coloana != nullptr)
 		{
 			strcpy_s(this->nume_coloana, strlen(nume_coloana) + 1, nume_coloana);
@@ -196,6 +197,7 @@ public:
 	//setter tip_coloana
 	void setTip(char* tip_coloana)
 	{
+		this->tip_coloana = new char[strlen(tip_coloana) + 1];
 		if (tip_coloana != nullptr)
 		{
 			strcpy_s(this->tip_coloana, strlen(tip_coloana) + 1, tip_coloana);
@@ -210,10 +212,11 @@ public:
 			this->dimensiune = dimensiune;
 		}
 	}
-
+	
 	//setter val_implicita
 	void setValImplicita(char* val_implicita)
 	{
+		this->val_implicita = new char[strlen(val_implicita) + 1];
 		if (val_implicita != 0)
 		{
 			strcpy_s(this->val_implicita, strlen(val_implicita) + 1, val_implicita);
