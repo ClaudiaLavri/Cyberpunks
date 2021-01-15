@@ -1014,6 +1014,56 @@ public:
 		}
 	}
 	
+	//functie pentru afisarea inregistrarilor
+	void Afisare_inregistrare(string* nume_col, int numar)
+	{
+		for (int j = 0; j < numar; j++)
+		{
+			for (int i = 0; i < nr_coloane; i++)
+			{
+
+				if (strcmp(col[i].getNumeColoana(), nume_col[j].c_str()) == 0)
+				{
+					cout << nume_col[j] << "\t" << "\t";
+				}
+			}
+		}
+		cout << endl;
+		for (int k = 0; k < nr_inregistrari; k++)
+		{
+			for (int j = 0; j < numar; j++)
+			{
+				for (int i = 0; i < nr_coloane; i++)
+				{
+					if (strcmp(col[i].getNumeColoana(), nume_col[j].c_str()) == 0)
+					{
+						cout << inreg[k].valoare[i] << "\t"<<"\t";
+					}
+				}
+			}
+			cout << endl;
+		}
+	}
+	
+	//functie pentru afisarea tuturor inregistrarilor dintr-o tabela
+	void Afisare_all_inregistrare()
+	{
+		for (int i = 0; i < nr_coloane; i++)
+		{
+			cout << col[i].getNumeColoana() << "\t" << "\t";
+		}
+		cout << endl;
+		for (int i = 0; i < nr_inregistrari; i++)
+		{
+			for (int j = 0; j < nr_coloane; j++)
+			{
+				cout << inreg[i].valoare[j] << "\t" << "\t";
+			}
+			cout << endl;
+		}
+	}
+	
+	
 	//functie pentru stergerea unei coloane
 	void Delete_col(string nume_coloana)
 	{
@@ -1327,17 +1377,19 @@ public:
 	//functie pentru inserarea unei inregistrari in tabela
 	void Insert_in_tabela(string nume_tabela, string* x)
 	{
+		bool verificare = false;
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (tabela[i].GetNume_tabela() == nume_tabela)
 			{
 				tabela[i].New_inregistrare(x);
+				verificare = true;
 			}
-			else
-			{
-				cout << "Nu exista tabela " << nume_tabela;
-				cout << endl;
-			}
+		}
+		if (verificare == false)
+		{
+			cout << "Nu exista tabela " << nume_tabela;
+			cout << endl;
 		}
 	}
 	//functie pentru stergerea coloanei nume_coloana din tabela nume_tabela
@@ -1349,6 +1401,28 @@ public:
 			{
 				tabela[i].Delete_col(nume_coloana);
 				cout << "A fost stearsa coloana " << nume_coloana << endl;
+			}
+		}
+	}
+	
+	void Select_din_tabela(string nume_tabela, string* nume_coloane, int numar)
+	{
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
+			{
+				tabela[i].Afisare_inregistrare(nume_coloane, numar);
+			}
+		}
+	}
+
+	void Select_all_din_tabela(string nume_tabela)
+	{
+		for (int i = 0; i < nr_tabele; i++)
+		{
+			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
+			{
+				tabela[i].Afisare_all_inregistrare();
 			}
 		}
 	}
@@ -1600,10 +1674,12 @@ public:
 					}
 					if (i == 5)
 					{
-						text_utilizator.erase(gasit, text_comenzi[i].length()+1);
+						text_utilizator.erase(gasit, text_comenzi[i].length() + 1);
 						string continuare;
 						int k = 1;
-						continuare= text_utilizator.substr(0, 1);
+						continuare = text_utilizator.substr(0, 1);
+						int nr_coloane;
+						string* nume_coloane = nullptr;
 						if (continuare == "A")
 						{
 							k = 2;
@@ -1612,7 +1688,7 @@ public:
 						{
 							text_utilizator.erase(0, strlen("("));
 							int p = 0;
-							int nr_coloane = 0;
+							nr_coloane = 0;
 							while (text_utilizator[p] != ')')
 							{
 								if (text_utilizator[p] == ',')
@@ -1621,32 +1697,45 @@ public:
 								}
 								p++;
 							}
-							string* nume_coloane = new string[nr_coloane];
+							nr_coloane++;
+							nume_coloane = new string[nr_coloane];
 							for (int j = 0; j < nr_coloane; j++)
-							{
-								int pos = text_utilizator.find(',');
-								string nume = text_utilizator.substr(0, pos);
-								nume_coloane[j] = nume;
-								text_utilizator.erase(0, nume.length());
-								if (text_utilizator.substr(0,3) == ") F")
+                        	    			{
+                                				int pos;
+                                				string nume;
+                              		  			if (j == nr_coloane - 1)
+                                				{
+                                    					pos = text_utilizator.find(')');
+                                  	  				nume = text_utilizator.substr(0, pos);
+                                	    				nume_coloane[j] = nume;
+									text_utilizator.erase(0, nume.length());
+									text_utilizator.erase(0, strlen(") FROM "));
+                                    					break;
+                                				}
+                               		 			pos = text_utilizator.find(',');
+                              		  			nume = text_utilizator.substr(0, pos);
+                              		  			nume_coloane[j] = nume;
+                              		  			text_utilizator.erase(0, nume.length());
+								if (text_utilizator.substr(0, 3) == ") F")
 								{
+									text_utilizator.erase(0, strlen(") FROM "));
 									break;
 								}
-								text_utilizator.erase(0, strlen(", "));
+                	                			text_utilizator.erase(0, strlen(", "));
 							}
 						}
 						if (k == 2)
 						{
-							text_utilizator.erase(0, strlen(" ALL FROM "));
+							text_utilizator.erase(0, strlen(" ALL FROM"));
 						}
-						string nume_tabela=text_utilizator.substr(0);
+						string nume_tabela = text_utilizator.substr(0);
 						if (k == 1)
 						{
-							//apelare select cu coloane
+							data.Select_din_tabela(nume_tabela, nume_coloane, nr_coloane);
 						}
 						if (k == 2)
 						{
-							//apelare select cu all
+							data.Select_all_din_tabela(nume_tabela);
 						}
 						getline(cin, text_utilizator);
 					}
