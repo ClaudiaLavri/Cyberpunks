@@ -1074,44 +1074,60 @@ public:
 	}
 	
 	
-	//functie pentru stergerea unei coloane
-	void Delete_col(string nume_coloana)
+	//functie pentru stergerea unei inregistrari
+	void Delete_inreg(string nume_inregistrare, string nume_coloana)
 	{
-		bool egal = false;
-		Coloana auxi;
-		for (int i = 0; i < this->nr_coloane; i++)
+		Inregistrare* copie = new Inregistrare[nr_inregistrari];
+		int cont = 0;
+		bool verificare_inregistrare = false;
+		bool verificare_coloana = false;
+		for (int i = 0; i < nr_coloane; i++)
 		{
 			if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) == 0)
 			{
-				egal = true;
-				auxi = col[i];
-			}
-		}
-		if (egal == false)
-		{
-			cout << "Nu exista coloana " << nume_coloana;
-		}
-		if (egal == true)
-		{
-			Coloana* copie = new Coloana[nr_coloane];
-			//Coloana aux;
-			int cont = 0;
-			for (int i = 0; i < this->nr_coloane; i++)
-			{
-				if (strcmp(this->col[i].getNumeColoana(), nume_coloana.c_str()) != 0)
+				verificare_coloana = true;
+				for (int j = 0; j < nr_inregistrari; j++)
 				{
-					copie[cont] = col[i];
-					cont++;
+					if (this->inreg[j].valoare[i] != nume_inregistrare)
+					{
+						copie[cont] = inreg[j];
+						cont++;
+					}
+					else
+					{
+						verificare_inregistrare = true;
+					}
 				}
 			}
-			delete[] col;
-			nr_coloane--;
-			col = new Coloana[nr_coloane];
-			for (int i = 0; i < nr_coloane; i++)
+		}
+		delete[] inreg;
+		if (verificare_coloana == true && verificare_inregistrare == true)
+		{
+			nr_inregistrari--;
+			inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
 			{
-				col[i] = copie[i];
+				inreg[i] = copie[i];
 			}
-			delete[] copie;
+			cout << "A fost actualizata o tabela" << endl;
+		}
+		else if (verificare_coloana == false)
+		{
+			inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				inreg[i] = copie[i];
+			}
+			cout << "Nu extista coloana " << nume_coloana << endl;
+		}
+		else if (verificare_inregistrare == false)
+		{
+			inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < nr_inregistrari; i++)
+			{
+				inreg[i] = copie[i];
+			}
+			cout << "Nu extista inregistrarea " << nume_inregistrare << endl;
 		}
 	}
 	
@@ -1419,14 +1435,13 @@ public:
 		}
 	}
 	//functie pentru stergerea coloanei nume_coloana din tabela nume_tabela
-	void Delete_from_table(string nume_tabela, string nume_coloana)
+	void Delete_from_table(string nume_tabela, string nume_inregistrare, string nume_coloana)
 	{
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
-				tabela[i].Delete_col(nume_coloana);
-				cout << "A fost stearsa coloana " << nume_coloana << endl;
+				tabela[i].Delete_inreg(nume_inregistrare, nume_coloana);
 			}
 		}
 	}
@@ -1691,16 +1706,20 @@ public:
 					}
 					if (i == 4)
 					{
-					text_utilizator.erase(gasit, text_comenzi[i].length());
-					string x;
-					int capat1 = text_utilizator.find(" ") + 1;
-					int capat2 = text_utilizator.find(" ") - 1;
-					x = text_utilizator.substr(capat1, capat2);
-					text_utilizator.erase(0, x.length());
-					text_utilizator.erase(0, strlen(" WHERE nume_coloana = ")+1);
-					string nume_coloana= text_utilizator.substr(0);
-					data.Delete_from_table(x, nume_coloana);
-					getline(cin, text_utilizator);
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						int capat2 = text_utilizator.find(" W") - 1;
+						x = text_utilizator.substr(capat1, capat2);
+						text_utilizator.erase(0, x.length());
+						text_utilizator.erase(0, strlen(" WHERE ") + 1);
+						int pos = text_utilizator.find(" =");
+						string nume_coloana = text_utilizator.substr(0, pos);
+						text_utilizator.erase(0, nume_coloana.length());
+						text_utilizator.erase(0, strlen(" = "));
+						string nume_inregistrare = text_utilizator.substr(0);
+						data.Delete_from_table(x, nume_inregistrare, nume_coloana);
+						getline(cin, text_utilizator);
 					}
 					if (i == 5)
 					{
