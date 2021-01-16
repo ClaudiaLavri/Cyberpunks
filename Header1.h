@@ -567,6 +567,7 @@ public:
 	
 	friend ostream& operator<<(ostream& out, Inregistrare);
 	friend istream& operator>>(istream& in, Inregistrare&);
+	friend class Tabela;
 };
 
 //supraincarcare operator << pentru clasa Inregistrare
@@ -1367,18 +1368,7 @@ public:
 			cout << "Nu exista nicio tabela"<<endl;
 		}
 	}
-	//functie pentru afisarea unei coloane
-	void Display_table(string x)
-	{
-		for (int i = 0; i < nr_tabele; i++)
-		{
-			if (x == tabela[i].GetNume_tabela())
-			{
-				cout << tabela[i];
-				cout<<endl;
-			}
-		}
-	}
+	
 	//functie pentru afisarea tabelei cu numele x
 	void Display_table(string x)
 	{
