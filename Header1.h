@@ -385,7 +385,7 @@ istream& operator>>(istream& in, Coloana& c)
 class Inregistrare
 {
 private:
-	static int id;
+	int id;
 	//int nr_verificare = 0;
 	string* valoare;
 	int capacitate;
@@ -487,6 +487,7 @@ public:
 	{
 		if (valoare != nullptr)
 		{
+			this->valoare = new string[capacitate];
 			for (int i = 0; i < this->capacitate; i++)
 			{
 				this->valoare[i] = valoare[i];
@@ -749,6 +750,15 @@ public:
 				this->col[i] = t.col[i];
 			}
 		}
+		if (t.nr_inregistrari > 0)
+		{
+			this->nr_inregistrari = t.nr_inregistrari;
+			this->inreg = new Inregistrare[nr_inregistrari];
+			for (int i = 0; i < t.nr_inregistrari; i++)
+			{
+				this->inreg[i] = t.inreg[i];
+			}
+		}
 		return *this;
 	}
 
@@ -990,6 +1000,7 @@ public:
 				//Inregistrare inreg(x, nr_coloane);
 				inreg[i].setCapacitate(nr_coloane);
 				inreg[i].setValoare(x);
+				inreg[i].id = nr_inregistrari;
 			}
 		}
 		else
@@ -1007,8 +1018,9 @@ public:
 				inreg[i] = copie[i];
 			}
 			delete[] copie;
-			inreg[nr_inregistrari - 1].setCapacitate(nr_coloane);
-			inreg[nr_inregistrari - 1].setValoare(x);
+			inreg[nr_inregistrari-1].setCapacitate(nr_coloane);
+			inreg[nr_inregistrari-1].setValoare(x);
+			inreg[nr_inregistrari-1].id = nr_inregistrari;
 		}
 	}
 	
@@ -1605,7 +1617,6 @@ public:
 						text_utilizator.erase(0, strlen("), ("));
 					}
 					data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
-					cout << "A fost creata tabela " << x << endl;
 					getline(cin, text_utilizator);
 					}
 					if (i == 1)
@@ -1624,7 +1635,6 @@ public:
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Drop_table(x);
-						cout << "A fost stearsa tabela " << x << endl;
 						getline(cin, text_utilizator);
 					}
 					if (i == 3)
