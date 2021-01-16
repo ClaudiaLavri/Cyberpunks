@@ -1039,6 +1039,11 @@ public:
 			}
 		}
 		cout << endl;
+		int* verificare = new int[numar];
+		for (int i = 0; i < numar; i++)
+		{
+			verificare[i] = 0;
+		}
 		for (int k = 0; k < nr_inregistrari; k++)
 		{
 			for (int j = 0; j < numar; j++)
@@ -1047,11 +1052,19 @@ public:
 				{
 					if (strcmp(col[i].getNumeColoana(), nume_col[j].c_str()) == 0)
 					{
-						cout << inreg[k].valoare[i] << "\t"<<"\t";
+						verificare[j] = 1;
+						cout << inreg[k].valoare[i] << "\t" << "\t";
 					}
 				}
 			}
 			cout << endl;
+		}
+		for (int i = 0; i < numar; i++)
+		{
+			if (verificare[i] == 0)
+			{
+				cout << "Nu exista coloana " << nume_col[i] << endl;
+			}
 		}
 	}
 	
@@ -1073,12 +1086,12 @@ public:
 		}
 	}
 	
-	
 	//functie pentru stergerea unei inregistrari
 	void Delete_inreg(string nume_inregistrare, string nume_coloana)
 	{
 		Inregistrare* copie = new Inregistrare[nr_inregistrari];
 		int cont = 0;
+		int cont_inreg = 0;
 		bool verificare_inregistrare = false;
 		bool verificare_coloana = false;
 		for (int i = 0; i < nr_coloane; i++)
@@ -1090,6 +1103,7 @@ public:
 				{
 					if (this->inreg[j].valoare[i] != nume_inregistrare)
 					{
+						cont_inreg++;
 						copie[cont] = inreg[j];
 						cont++;
 					}
@@ -1103,7 +1117,7 @@ public:
 		delete[] inreg;
 		if (verificare_coloana == true && verificare_inregistrare == true)
 		{
-			nr_inregistrari--;
+			nr_inregistrari = nr_inregistrari - cont_inreg;
 			inreg = new Inregistrare[nr_inregistrari];
 			for (int i = 0; i < nr_inregistrari; i++)
 			{
@@ -1144,7 +1158,7 @@ public:
 		}
 		if (ok == false)
 		{
-			cout << "Nu exista coloana " << nume_coloana1;
+			cout << "Nu exista coloana " << nume_coloana1 << endl;
 		}
 		if (ok == true)
 		{
@@ -1172,12 +1186,13 @@ public:
 						inreg[j].valoare[numar_coloana1] = val_noua;
 						ok = true;
 					}
-				}
-				if (ok == true)
-				{
-					nr_modificari++;
+					if (ok == true)
+					{
+						nr_modificari++;
+					}
 				}
 			}
+			nr_modificari = (int)(nr_modificari / nr_coloane);
 		}
 	}
 	
@@ -1319,35 +1334,39 @@ public:
 		}
 		else
 		{
-			for (int i = 0; i < this->nr_tabele; i++)
+			bool verificare = true;
+			for (int i = 0;  i < this->nr_tabele; i++)
 			{
 				if (x == tabela[i].GetNume_tabela())
 				{
-					cout << "Tabela exista deja";
-					break;
+					cout << "Tabela " << x << " exista deja"<<endl;
+					verificare = false;
 				}
 			}
-			Tabela* copie = new Tabela[nr_tabele + 1];
-			for (int i = 0; i < this->nr_tabele; i++)
+			if (verificare == true)
 			{
-				copie[i] = tabela[i];
+				Tabela* copie = new Tabela[nr_tabele + 1];
+				for (int i = 0; i < this->nr_tabele; i++)
+				{
+					copie[i] = tabela[i];
+				}
+				delete[] tabela;
+				nr_tabele++;
+				tabela = new Tabela[nr_tabele];
+				for (int i = 0; i < this->nr_tabele - 1; i++)
+				{
+					tabela[i] = copie[i];
+				}
+				delete[] copie;
+				tabela[nr_tabele - 1].SetNume_tabela((char*)x.c_str());
+				tabela[nr_tabele - 1].SetNr_coloane(nr_col);
+				tabela[nr_tabele - 1].Alocare_col(nr_col);
+				for (int i = 0; i < nr_col; i++)
+				{
+					tabela[nr_tabele - 1].New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
+				}
+				cout << "A fost creata tabela " << x << endl;
 			}
-			delete[] tabela;
-			nr_tabele++;
-			tabela = new Tabela[nr_tabele];
-			for (int i = 0; i < this->nr_tabele - 1; i++)
-			{
-				tabela[i] = copie[i];
-			}
-			delete[] copie;
-			tabela[nr_tabele-1].SetNume_tabela((char*)x.c_str());
-			tabela[nr_tabele-1].SetNr_coloane(nr_col);
-			tabela[nr_tabele-1].Alocare_col(nr_col);
-			for (int i = 0; i < nr_col; i++)
-			{
-				tabela[nr_tabele-1].New_coloana(nume_coloane[i], tip_coloane[i], dimensiune_coloane[i], valori_implicite[i], i);
-			}
-			cout << "A fost creata tabela " << x << endl;
 		}
 	}
 	//functie pentru stergerea unei coloane
@@ -1434,6 +1453,7 @@ public:
 			cout << endl;
 		}
 	}
+	
 	//functie pentru stergerea coloanei nume_coloana din tabela nume_tabela
 	void Delete_from_table(string nume_tabela, string nume_inregistrare, string nume_coloana)
 	{
@@ -1446,37 +1466,57 @@ public:
 		}
 	}
 	
+	//functie pentru afisarea inregistrarilor din coloana nume_tabela
 	void Select_din_tabela(string nume_tabela, string* nume_coloane, int numar)
 	{
+		bool verificare = false;
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
+				verificare = true;
 				tabela[i].Afisare_inregistrare(nume_coloane, numar);
 			}
 		}
+		if (verificare == false)
+		{
+			cout << "Nu exista tabela " << nume_tabela<<endl;
+		}
 	}
 
+	//functie pentru afisarea tuturor inregistrarilor din coloana nume_tabela
 	void Select_all_din_tabela(string nume_tabela)
 	{
+		bool verificare = false;
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (strcmp(tabela[i].GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
+				verificare = true;
 				tabela[i].Afisare_all_inregistrare();
 			}
 		}
+		if (verificare == false)
+		{
+			cout << "Nu extista tabela " << nume_tabela << endl;
+		}
 	}
 	
-	void Update_coloana_din_tabela(string nume_tabela, string nume_coloana1, string val,string nume_coloana2, string val_noua, int nr_modificari)
+	void Update_coloana_din_tabela(string nume_tabela, string nume_coloana1, string val, string nume_coloana2, string val_noua, int nr_modificari)
 	{
+		bool verificare = false;
 		for (int i = 0; i < nr_tabele; i++)
 		{
 			if (strcmp(tabela->GetNume_tabela(), nume_tabela.c_str()) == 0)
 			{
+				verificare = true;
 				tabela[i].Update_coloana(nume_coloana1, val, nume_coloana2, val_noua, nr_modificari);
 				cout << "Au fost modificate " << nr_modificari << " inregistrari in coloana " << nume_coloana2;
 			}
+		}
+		if (verificare == false)
+		{
+			cout << "Nu extista tabela " << nume_tabela << endl;
 		}
 	}
 	
@@ -1555,88 +1595,83 @@ public:
 				{
 					if (i == 0)
 					{
-					text_utilizator.erase(gasit, text_comenzi[i].length());
-					string x;
-					int capat1 = text_utilizator.find(" ")+1;
-					int capat2 = text_utilizator.find(" ((")-1;
-					x = text_utilizator.substr(capat1, capat2);
-					int nr_col = 0;
-					nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), '(') - 1;
-					char** nume_coloane = new char* [nr_col];
-					for (int i = 0; i < nr_col; i++)
-					{
-						nume_coloane[i] = new char[nr_col];
-					}
-					char** tip_coloane = new char* [nr_col];
-					for (int i = 0; i < nr_col; i++)
-					{
-						tip_coloane[i] = new char[nr_col];
-					}
-					int* dimensiune_coloane = new int[nr_col];
-					char** valori_implicite = new char* [nr_col];
-					for (int i = 0; i < nr_col; i++)
-					{
-						valori_implicite[i] = new char[nr_col];
-					}
-					text_utilizator.erase(0, x.length());
-					text_utilizator.erase(0, strlen(" ((")+1);
-					bool ok = 1;
-					for (int j = 0; j < nr_col; j++)
-					{
-						int p=0;
-						int verificare = 0;
-						
-						while (text_utilizator[p] != ')')
+						text_utilizator.erase(gasit, text_comenzi[i].length());
+						string x;
+						int capat1 = text_utilizator.find(" ") + 1;
+						int capat2 = text_utilizator.find(" ((") - 1;
+						x = text_utilizator.substr(capat1, capat2);
+						int nr_col = 0;
+						nr_col = std::count(text_utilizator.begin(), text_utilizator.end(), '(') - 1;
+						char** nume_coloane = new char* [nr_col];
+						for (int i = 0; i < nr_col; i++)
 						{
-							if (text_utilizator[p] == ',')
+							nume_coloane[i] = new char[nr_col];
+						}
+						char** tip_coloane = new char* [nr_col];
+						for (int i = 0; i < nr_col; i++)
+						{
+							tip_coloane[i] = new char[nr_col];
+						}
+						int* dimensiune_coloane = new int[nr_col];
+						char** valori_implicite = new char* [nr_col];
+						for (int i = 0; i < nr_col; i++)
+						{
+							valori_implicite[i] = new char[nr_col];
+						}
+						text_utilizator.erase(0, x.length());
+						text_utilizator.erase(0, strlen(" ((") + 1);
+						for (int j = 0; j < nr_col; j++)
+						{
+							int p = 0;
+							int verificare = 0;
+
+							while (text_utilizator[p] != ')')
 							{
-								verificare++;
+								if (text_utilizator[p] == ',')
+								{
+									verificare++;
+								}
+								p++;
 							}
-							p++;
-						}
-						if (verificare != 3)
-						{
-							cout << "Comanda scrisa incorect!" << endl;
-							ok = 0;
-							break;
-						}
+							if (verificare != 3)
+							{
+								cout << "Comanda scrisa incorect!" << endl;
+								break;
+							}
 
-						int pos = text_utilizator.find(',');
-						char* nume = new char[pos + 1];
-						strcpy_s(nume, pos +1, (char*)(text_utilizator.substr(0, pos)).c_str());
-						strcpy_s(nume_coloane[j], strlen(nume) + 1, nume);
-						text_utilizator.erase(0, strlen(nume));
-						text_utilizator.erase(0, strlen(", "));
+							int pos = text_utilizator.find(',');
+							char* nume = new char[pos + 1];
+							strcpy_s(nume, pos + 1, (char*)(text_utilizator.substr(0, pos)).c_str());
+							strcpy_s(nume_coloane[j], strlen(nume) + 1, nume);
+							text_utilizator.erase(0, strlen(nume));
+							text_utilizator.erase(0, strlen(", "));
 
-						pos = text_utilizator.find(',');
-						char* tip = new char[pos + 1];
-						strcpy_s(tip, pos+1, (char*)(text_utilizator.substr(0, pos)).c_str());
-						strcpy_s(tip_coloane[j], strlen(tip) + 1, tip);
-						text_utilizator.erase(0, strlen(tip));
-						text_utilizator.erase(0, strlen(", "));
+							pos = text_utilizator.find(',');
+							char* tip = new char[pos + 1];
+							strcpy_s(tip, pos + 1, (char*)(text_utilizator.substr(0, pos)).c_str());
+							strcpy_s(tip_coloane[j], strlen(tip) + 1, tip);
+							text_utilizator.erase(0, strlen(tip));
+							text_utilizator.erase(0, strlen(", "));
 
-						pos = text_utilizator.find(',');
-						int dim = std::stoi(text_utilizator.substr(0, pos));
-						dimensiune_coloane[j] = dim;
-						text_utilizator.erase(0, text_utilizator.substr(0, pos).length());
-						text_utilizator.erase(0, strlen(", "));
+							pos = text_utilizator.find(',');
+							int dim = std::stoi(text_utilizator.substr(0, pos));
+							dimensiune_coloane[j] = dim;
+							text_utilizator.erase(0, text_utilizator.substr(0, pos).length());
+							text_utilizator.erase(0, strlen(", "));
 
-						pos = text_utilizator.find(')');
-						char* valoare = new char[pos + 1];
-						strcpy_s(valoare, pos+1, (char*)(text_utilizator.substr(0, pos)).c_str());
-						strcpy_s(valori_implicite[j], strlen(valoare) + 1, valoare);
-						text_utilizator.erase(0, strlen(valoare));
+							pos = text_utilizator.find(')');
+							char* valoare = new char[pos + 1];
+							strcpy_s(valoare, pos + 1, (char*)(text_utilizator.substr(0, pos)).c_str());
+							strcpy_s(valori_implicite[j], strlen(valoare) + 1, valoare);
+							text_utilizator.erase(0, strlen(valoare));
 
-						if (text_utilizator.substr(0, text_utilizator.length()) == "))")
-						{
-							break;
+							if (text_utilizator.substr(0, text_utilizator.length()) == "))")
+							{
+								break;
+							}
+							text_utilizator.erase(0, strlen("), ("));
 						}
-						text_utilizator.erase(0, strlen("), ("));
-						}
-						if (ok == 1)
-						{
-							data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
-						}
+						data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
 						getline(cin, text_utilizator);
 					}
 					if (i == 1)
