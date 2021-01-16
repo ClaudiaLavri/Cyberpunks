@@ -1565,6 +1565,7 @@ public:
 					}
 					text_utilizator.erase(0, x.length());
 					text_utilizator.erase(0, strlen(" ((")+1);
+					bool ok = 1;
 					for (int j = 0; j < nr_col; j++)
 					{
 						int p=0;
@@ -1581,6 +1582,7 @@ public:
 						if (verificare != 3)
 						{
 							cout << "Comanda scrisa incorect!" << endl;
+							ok = 0;
 							break;
 						}
 
@@ -1615,9 +1617,12 @@ public:
 							break;
 						}
 						text_utilizator.erase(0, strlen("), ("));
-					}
-					data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
-					getline(cin, text_utilizator);
+						}
+						if (ok == 1)
+						{
+							data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
+						}
+						getline(cin, text_utilizator);
 					}
 					if (i == 1)
 					{
