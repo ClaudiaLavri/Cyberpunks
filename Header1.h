@@ -1332,6 +1332,7 @@ public:
 		{
 			this->tabela = nullptr;
 		}
+		return *this;
 	}
 
 	//destructor
