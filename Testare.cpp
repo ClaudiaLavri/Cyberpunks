@@ -45,7 +45,11 @@ int main()
 	//testare setter si getter nr_coloane
 	t.SetNr_coloane(1);
 	cout << "Numarul de coloane este: " << t.GetNr_coloane() << endl;
-
+	
+	//testare setter si getter nr_inregistrari
+	t.SetNr_inregistrari(1);
+	cout << "Numarul de inregistrari este: " << t.GetNr_inregistrari() << endl;
+	
 	//testare coloane
 	Coloana* col = new Coloana[2];
 	col[0] =  c ;
