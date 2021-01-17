@@ -869,6 +869,28 @@ public:
 			return 0;
 		}
 	}
+	
+	//setter nr_inregistrari
+	void SetNr_inregistrari(int nr_inregistrari)
+	{
+		if (nr_inregistrari > 0)
+		{
+			this->nr_inregistrari = nr_inregistrari;
+		}
+	}
+
+	//getter nr_inregistrari
+	int GetNr_inregistrari()
+	{
+		if (this->nr_inregistrari > 0)
+		{
+			return this->nr_inregistrari;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 
 	//supraincarcarea operatorului !
 	bool operator!()
