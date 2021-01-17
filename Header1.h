@@ -1142,34 +1142,13 @@ public:
 			}
 		}
 		delete[] inreg;
-		if (verificare_coloana == true && verificare_inregistrare == true)
+		nr_inregistrari--;
+		inreg = new Inregistrare[nr_inregistrari];
+		for (int i = 0; i < nr_inregistrari; i++)
 		{
-			nr_inregistrari = nr_inregistrari - cont_inreg;
-			inreg = new Inregistrare[nr_inregistrari];
-			for (int i = 0; i < nr_inregistrari; i++)
-			{
-				inreg[i] = copie[i];
-			}
-			cout << "A fost actualizata o tabela" << endl;
+			inreg[i] = copie[i];
 		}
-		else if (verificare_coloana == false)
-		{
-			inreg = new Inregistrare[nr_inregistrari];
-			for (int i = 0; i < nr_inregistrari; i++)
-			{
-				inreg[i] = copie[i];
-			}
-			cout << "Nu extista coloana " << nume_coloana << endl;
-		}
-		else if (verificare_inregistrare == false)
-		{
-			inreg = new Inregistrare[nr_inregistrari];
-			for (int i = 0; i < nr_inregistrari; i++)
-			{
-				inreg[i] = copie[i];
-			}
-			cout << "Nu extista inregistrarea " << nume_inregistrare << endl;
-		}
+		cout << "A fost actualizata o tabela" << endl;
 	}
 	
 	void Update_coloana(string nume_coloana1, string val_noua, string nume_coloana2, string val, int& nr_modificari)
