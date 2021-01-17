@@ -294,7 +294,7 @@ public:
 	}
 
 	//supraincarcare operator -
-	Coloana operator-(Coloana t)
+	/*Coloana operator-(Coloana t)
 	{
 		Coloana copie = *this;
 		if (dimensiune >= t.dimensiune)
@@ -306,7 +306,7 @@ public:
 		{
 			cout << "Dimensiunea va fi negativa"<<endl;
 		}
-	}
+	}*/
 
 	//supraincarcare operator []
 	int operator[](int index)
@@ -1608,6 +1608,320 @@ public:
 		this->text_utilizator = text_utilizator;
 	}
 
+	bool check_create(string text_utilizator)
+	{
+		bool check = true;
+		int paranteze1 = 0;
+		int paranteze2 = 0;
+		
+		for (int i = 0; i < text_utilizator.length(); i++)
+		{
+			if (text_utilizator[i] == '(' && text_utilizator[i+1] == '(')
+			{
+				paranteze1++;
+			}
+			if (text_utilizator[i] == ')' && text_utilizator[i + 1] == ')')
+			{
+				paranteze2++;
+			}
+		}
+		if (text_utilizator.substr(0, 13) != "CREATE TABLE ")
+		{
+			check = false;
+			return check;
+		}
+		text_utilizator.erase(0, 13);
+		if (paranteze1 != 1)
+		{
+			check = false;
+			return check;
+		}
+		if (paranteze2 != 1)
+		{
+			check = false;
+			return check;
+		}
+		int pos = text_utilizator.find(" ((");
+		string nume_tabela = text_utilizator.substr(0, pos);
+		for (int i = 0; i < nume_tabela.length(); i++)
+		{
+			if (nume_tabela[i] == ' ')
+			{
+				check = false;
+				return check;
+			}
+		}
+		text_utilizator.erase(0, nume_tabela.length());
+		text_utilizator.erase(0, strlen(" (("));
+		int spatii = 0;
+		int virgule = 0;
+		int parantezainchisa = 0;
+		for (int i = 0; i < text_utilizator.length(); i++)
+		{
+			if (text_utilizator[i] == ',' && text_utilizator[i+1] != ' ')
+			{
+				check = false;
+				return check;
+			}
+			if (text_utilizator[i] == ' ')
+			{
+				spatii++;
+			}
+			if (text_utilizator[i] == ',')
+			{
+				virgule++;
+			}
+			if (text_utilizator[i] == ')')
+			{
+				parantezainchisa++;
+			}
+		}
+		if (spatii != virgule)
+		{
+			check = false;
+			return check;
+		}
+		int nr_coloane = parantezainchisa - 1;
+		for (int i = 0; i < nr_coloane; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				if (j == 3)
+				{
+					pos = text_utilizator.find(')');
+				}
+				else
+				{
+					pos = text_utilizator.find(',');
+				}
+				string info= text_utilizator.substr(0, pos);
+				if (j == 2)
+				{
+					for (int t = 0; t < info.length(); t++)
+					{
+						if (!(info[t] >= '0' && info[t] <= '9'))
+						{
+							check = false;
+							return check;
+						}
+					}
+				}
+				else
+				{
+					for (int t = 0; t < info.length(); t++)
+					{
+						if (!((info[t] >= 'A' && info[t] <= 'Z') || (info[t] >= 'a' && info[t] <= 'z') || (info[t] >= '0' && info[t] <= '9')))
+						{
+							check = false;
+							return check;
+						}
+					}
+				}
+				text_utilizator.erase(0, info.length());
+				if (j == 3)
+				{
+					if (i == nr_coloane - 1)
+					{
+						if (text_utilizator.substr(0, 2) != "))")
+						{
+							check = false;
+							return check;
+						}
+						text_utilizator.erase(0, strlen("))"));
+					}
+					else
+					{
+						if (text_utilizator.substr(0, 4) != "), (")
+						{
+							check = false;
+							return check;
+						}
+						text_utilizator.erase(0, strlen("), ("));
+					}
+				}
+				else 
+				{
+					if (text_utilizator.substr(0, 2) != ", ")
+					{
+						check = false;
+						return check;
+					}
+					text_utilizator.erase(0, strlen(", "));
+				}
+			}
+		}
+		if (text_utilizator != "")
+		{
+			check = false;
+			return check;
+		}
+		return check;
+	}
+	
+	bool check_display(string text_utilizator)
+	{
+		bool check = true;
+		if (text_utilizator.substr(0, 14) != "DISPLAY TABLE ")
+		{
+			check = false;
+			return check;
+		}
+		text_utilizator.erase(0, 14);
+		string nume_tabela = text_utilizator.substr(0);
+		for (int i= 0; i < nume_tabela.length(); i++)
+		{
+			if (!((nume_tabela[i] >= 'A' && nume_tabela[i] <= 'Z') || (nume_tabela[i] >= 'a' && nume_tabela[i] <= 'z') || (nume_tabela[i] >= '0' && nume_tabela[i] <= '9')))
+			{
+				check = false;
+				return check;
+			}
+		}
+		text_utilizator.erase(0, nume_tabela.length());
+		if (text_utilizator != "")
+		{
+			check = false;
+			return check;
+		}
+		return check;
+	}
+	
+	bool check_drop(string text_utilizator)
+	{
+		bool check = true;
+		if (text_utilizator.substr(0, 11) != "DROP TABLE ")
+		{
+			check = false;
+			return check;
+		}
+		text_utilizator.erase(0, 11);
+		string nume_tabela = text_utilizator.substr(0);
+		for (int i = 0; i < nume_tabela.length(); i++)
+		{
+			if (!((nume_tabela[i] >= 'A' && nume_tabela[i] <= 'Z') || (nume_tabela[i] >= 'a' && nume_tabela[i] <= 'z') || (nume_tabela[i] >= '0' && nume_tabela[i] <= '9')))
+			{
+				check = false;
+				return check;
+			}
+		}
+		text_utilizator.erase(0, nume_tabela.length());
+		if (text_utilizator != "")
+		{
+			check = false;
+			return check;
+		}
+		return check;
+	}
+	
+	bool check_insert(string text_utilizator)
+	{
+		bool check = true;
+		if (text_utilizator.substr(0, 12) != "INSERT INTO ")
+		{
+			check = false;
+			return check;
+		}
+		text_utilizator.erase(0, 12);
+		int parantezadeschisa = 0;
+		int parantezainchisa = 0;
+		int values = 0;
+		for (int i = 0; i < text_utilizator.length(); i++)
+		{
+			if (text_utilizator[i] == '(')
+			{
+				parantezadeschisa++;
+			}
+			if (text_utilizator[i] == ')')
+			{
+				parantezainchisa++;
+			}
+			if (text_utilizator[i] == 'V' && text_utilizator[i + 1] == 'A' && text_utilizator[i + 2] == 'L' && text_utilizator[i + 3] == 'U' && text_utilizator[i + 4] == 'E' && text_utilizator[i + 5] == 'S')
+			{
+				values++;
+			}
+		}
+		if (parantezadeschisa != 1 || parantezainchisa != 1)
+		{
+			check = false;
+			return check;
+		}
+		if (values != 1)
+		{
+			check = false;
+			return check;
+		}
+		int pos = text_utilizator.find(" V");
+		string nume_tabela = text_utilizator.substr(0, pos);
+		for (int i = 0; i < nume_tabela.length(); i++)
+		{
+			if (!((nume_tabela[i] >= 'A' && nume_tabela[i] <= 'Z') || (nume_tabela[i] >= 'a' && nume_tabela[i] <= 'z') || (nume_tabela[i] >= '0' && nume_tabela[i] <= '9')))
+			{
+				check = false;
+				return check;
+			}
+		}
+		text_utilizator.erase(0, nume_tabela.length());
+		text_utilizator.erase(0, strlen(" VALUES("));
+		int nr_valori = 0;
+		for (int i = 0; i < text_utilizator.length(); i++)
+		{
+			if (text_utilizator[i] == ',')
+			{
+				nr_valori++;
+			}
+			if (text_utilizator[i] == ',' && text_utilizator[i + 1] != ' ')
+			{
+				check = false;
+				return check;
+			}
+		}
+		nr_valori++;
+		for (int i = 0; i < nr_valori; i++)
+		{
+			if (i == nr_valori - 1)
+			{
+				pos = text_utilizator.find(')');
+			}
+			else
+			{
+				pos = text_utilizator.find(',');
+			}
+			string info = text_utilizator.substr(0, pos);
+			for (int t = 0; t < info.length(); t++)
+			{
+				if (!((info[t] >= 'A' && info[t] <= 'Z') || (info[t] >= 'a' && info[t] <= 'z') || (info[t] >= '0' && info[t] <= '9')))
+				{
+					check = false;
+					return check;
+				}
+			}
+			text_utilizator.erase(0, info.length());
+			if (i == nr_valori - 1)
+			{
+				if (text_utilizator.substr(0, 1) != ")")
+				{
+					check = false;
+					return check;
+				}
+				text_utilizator.erase(0, strlen(")"));
+			}
+			else
+			{
+				if (text_utilizator.substr(0, 2) != ", ")
+				{
+					check = false;
+					return check;
+				}
+				text_utilizator.erase(0, strlen(", "));
+			}
+		}
+		if (text_utilizator != "")
+		{
+			check = false;
+			return check;
+		}
+		return check;
+	}
+	
 	//functie pentru compararea valorii introduse de utilizator
 	void compara()
 	{
@@ -1623,6 +1937,14 @@ public:
 				{
 					if (i == 0)
 					{
+						bool verifica = check_create(text_utilizator);
+						if (verifica == false)
+						{
+							cout << "Comanda este scrisa gresit!" << endl;
+							cout<< "Structura este: CREATE TABLE table_name ((nume_coloana_1, tip, dimensiune, valoare_implicita), (nume_coloana_2, tip, dimensiune, valoare_implicita), ...) " << endl;
+						}
+						if (verifica == true)
+						{
 						text_utilizator.erase(gasit, text_comenzi[i].length());
 						string x;
 						int capat1 = text_utilizator.find(" ") + 1;
@@ -1700,28 +2022,55 @@ public:
 							text_utilizator.erase(0, strlen("), ("));
 						}
 						data.New_table(x, nume_coloane, tip_coloane, dimensiune_coloane, valori_implicite, nr_col);
+						}
 						getline(cin, text_utilizator);
 					}
 					if (i == 1)
 					{
+						bool verifica = check_display(text_utilizator);
+						if (verifica == false)
+						{
+							cout << "Comanda este scrisa gresit!" << endl;
+							cout << "Structura este: DISPLAY TABLE table_name" << endl;
+						}
+						if (verifica == true)
+						{
 						text_utilizator.erase(gasit, text_comenzi[i].length());
 						string x;
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Display_table(x);
+						}
 						getline(cin, text_utilizator);
 					}
 					if (i == 2)
 					{
+						bool verifica = check_drop(text_utilizator);
+						if (verifica == false)
+						{
+							cout << "Comanda este scrisa gresit!" << endl;
+							cout << "Structura este: DROP TABLE table_name" << endl;
+						}
+						if (verifica == true)
+						{
 						text_utilizator.erase(gasit, text_comenzi[i].length());
 						string x;
 						int capat1 = text_utilizator.find(" ") + 1;
 						x = text_utilizator.substr(capat1);
 						data.Drop_table(x);
+						}
 						getline(cin, text_utilizator);
 					}
 					if (i == 3)
 					{
+						bool verifica = check_insert(text_utilizator);
+						if (verifica == false)
+						{
+							cout << "Comanda este scrisa gresit!" << endl;
+							cout << "Structura este: INSERT INTO table_name VALUES(...)" << endl;
+						}
+						if (verifica == true)
+						{
 						text_utilizator.erase(gasit, text_comenzi[i].length());
 						string x;
 						int capat1 = text_utilizator.find(" ") + 1;
@@ -1765,6 +2114,7 @@ public:
 							text_utilizator.erase(0, strlen(", "));
 						}
 						data.Insert_in_tabela(x, valori);
+						}
 						getline(cin, text_utilizator);
 					}
 					if (i == 4)
