@@ -95,7 +95,7 @@ public:
 			strcpy_s(this->tip_coloana, strlen("N/A") + 1, "N/A");
 		}
 
-		if (dimensiune > 0)
+		if (c.dimensiune > 0)
 		{
 			this->dimensiune = c.dimensiune;
 		}
@@ -678,7 +678,7 @@ public:
 	//constructor de copiere
 	Tabela(const Tabela& t)
 	{
-		if (nume_tabela != nullptr)
+		if (t.nume_tabela != nullptr)
 		{
 			this->nume_tabela = new char[strlen(t.nume_tabela) + 1];
 			strcpy_s(this->nume_tabela, strlen(t.nume_tabela) + 1, t.nume_tabela);
@@ -688,7 +688,7 @@ public:
 			this->nume_tabela = nullptr;
 		}
 
-		if (nr_coloane > 0)
+		if (t.nr_coloane > 0)
 		{
 			this->nr_coloane = t.nr_coloane;
 			this->col = new Coloana[nr_coloane];
@@ -703,7 +703,7 @@ public:
 			nr_coloane = 0;
 		}
 
-		if (nr_inregistrari > 0)
+		if (t.nr_inregistrari > 0)
 		{
 			this->nr_inregistrari = t.nr_inregistrari;
 			this->inreg = new Inregistrare[nr_inregistrari];
@@ -911,6 +911,11 @@ public:
 	{
 		Tabela copie = *this;
 		copie.nr_coloane += valoare;
+		copie.col = new Coloana[copie.nr_coloane];
+		for(int i=nr_coloane;i<copie.nr_coloane;i++)
+		{ 
+			cin >> copie.col[i];
+		}
 		return copie;
 	}
 
