@@ -145,7 +145,7 @@ int main()
 	cin >> c2;
 
 	cout << c1 + c2 << endl;
-	cout << c1 - c2 << endl;
+	//////cout << c1 - c2 << endl;
 	cout << c1++<<endl;//merge
 	cout << (c1 > c2) << endl; 
 	c2 == c1; 
