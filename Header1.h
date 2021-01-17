@@ -1168,8 +1168,8 @@ public:
 		}
 		if (ok == true)
 		{
-			int numar_coloana1;
-			int numar_coloana2;
+			int numar_coloana1 = 0;
+			int numar_coloana2 = 0;
 			for (int i = 0; i < nr_coloane; i++)
 			{
 				if (strcmp(this->col[i].getNumeColoana(), nume_coloana1.c_str()) == 0)
