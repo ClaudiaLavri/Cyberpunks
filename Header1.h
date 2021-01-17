@@ -588,8 +588,8 @@ istream& operator>>(istream& in, Inregistrare& x)
 {
 	cout << "Capacitate: ";
 	in >> x.capacitate;
-	in >> ws;
 	cout << "Valori: ";
+	in >> ws;
 	x.valoare = new string[x.capacitate];
 	for (int i = 0; i < x.capacitate; i++)
 	{
